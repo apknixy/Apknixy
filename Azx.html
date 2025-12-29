@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Apknixy - Admin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body { font-family: sans-serif; padding: 20px; background: #eee; }
+        .box { background: white; padding: 15px; margin-bottom: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        input, button { padding: 10px; margin: 5px 0; width: 100%; box-sizing: border-box; }
+        button { background: #333; color: white; border: none; cursor: pointer; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 14px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background: #4CAF50; color: white; }
+    </style>
+</head>
+<body>
+
+    <h2>👮 Admin Panel</h2>
+    <div id="login-box" class="box">
+        <p>Login with <b>apknixy@gmail.com</b></p>
+        <button onclick="adminLogin()">Login via Google</button>
+    </div>
+
+    <div id="dashboard" class="box" style="display:none;">
+        
+        <h3>🔍 Find User & Add Money</h3>
+        <input type="text" id="uEmail" placeholder="Enter User Email">
+        <button onclick="findUser()" style="background:#2196F3">Search User</button>
+        
+        <div id="userResult" style="margin-top:10px; padding:10px; background:#f9f9f9; border:1px solid #ddd; display:none;">
+            <p><b>User:</b> <span id="resEmail"></span></p>
+            <p><b>Balance:</b> ₹<span id="resBal"></span></p>
+            <button onclick="addMoney(50)" style="background:green">+ Add ₹50</button>
+            <button onclick="addMoney(100)" style="background:green">+ Add ₹100</button>
+            <button onclick="addMoney(500)" style="background:green">+ Add ₹500</button>
+        </div>
+
+        <hr>
+
+        <h3>🏦 Withdrawal Requests</h3>
+        <button onclick="loadWithdrawals()">🔄 Refresh List</button>
+        <div style="overflow-x:auto;">
+            <table id="wTable">
+                <thead><tr><th>Date</th><th>Email</th><th>Pay (₹)</th><th>Status</th><th>Action</th></tr></thead>
+                <tbody id="wList"></tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyBXOBu6fmbco27_ugn9pFg2XQ-TaIeNRpY",
+            authDomain: "apknixy-bc9ee.firebaseapp.com",
+            projectId: "apknixy-bc9ee",
+            storageBucket: "apknixy-bc9ee.firebasestorage.app",
+            messagingSenderId: "99276264960",
+            appId: "1:99276264960:web:a4f28913305288544e2ae5"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+        let currentUserId = null;
+
+        function adminLogin() {
+            auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).then(res => {
+                if(res.user.email === "apknixy@gmail.com") {
+                    document.getElementById('login-box').style.display = 'none';
+                    document.getElementById('dashboard').style.display = 'block';
+                    loadWithdrawals();
+                } else {
+                    alert("Access Denied! Only apknixy@gmail.com allowed.");
+                    auth.signOut();
+                }
+            });
+        }
+
+        // --- ADD MONEY ---
+        function findUser() {
+            const email = document.getElementById('uEmail').value;
+            db.collection('users').where('email', '==', email).get().then(snap => {
+                if(snap.empty) return alert("User not found!");
+                const doc = snap.docs[0];
+                currentUserId = doc.id;
+                document.getElementById('resEmail').innerText = doc.data().email;
+                document.getElementById('resBal').innerText = (doc.data().balance || 0).toFixed(2);
+                document.getElementById('userResult').style.display = 'block';
+            });
+        }
+
+        function addMoney(amount) {
+            if(!currentUserId) return;
+            if(confirm(`Add ₹${amount} to this user?`)) {
+                db.collection('users').doc(currentUserId).get().then(doc => {
+                    const newBal = (doc.data().balance || 0) + amount;
+                    db.collection('users').doc(currentUserId).update({ balance: newBal }).then(() => {
+                        alert("Money Added!");
+                        findUser(); // Refresh display
+                    });
+                });
+            }
+        }
+
+        // --- WITHDRAWALS ---
+        function loadWithdrawals() {
+            const list = document.getElementById('wList');
+            list.innerHTML = "";
+            db.collection('withdrawals').orderBy('date', 'desc').limit(20).get().then(snap => {
+                snap.forEach(doc => {
+                    const d = doc.data();
+                    const row = `<tr>
+                        <td>${new Date(d.date.seconds*1000).toLocaleDateString()}</td>
+                        <td>${d.email}</td>
+                        <td style="font-weight:bold; color:green">₹${d.payout}</td>
+                        <td>${d.status}</td>
+                        <td>
+                            ${d.status === 'pending' ? 
+                            `<button onclick="payUser('${doc.id}', '${d.userId}', ${d.amount})" style="background:#FF9800; font-size:12px;">✅ Mark Paid</button>` 
+                            : 'Done'}
+                        </td>
+                    </tr>`;
+                    list.innerHTML += row;
+                });
+            });
+        }
+
+        function payUser(docId, userId, amount) {
+            if(confirm("Confirm that you have sent UPI payment? This will deduct user balance.")) {
+                db.collection('users').doc(userId).get().then(uDoc => {
+                    const curBal = uDoc.data().balance || 0;
+                    if(curBal < amount) return alert("Error: User balance is less than withdrawal amount!");
+
+                    // 1. Deduct Balance
+                    db.collection('users').doc(userId).update({ balance: curBal - amount }).then(() => {
+                        // 2. Update Status
+                        db.collection('withdrawals').doc(docId).update({ status: 'paid' }).then(() => {
+                            alert("Success! Balance deducted and marked paid.");
+                            loadWithdrawals();
+                        });
+                    });
+                });
+            }
+        }
+    </script>
+</body>
+</html>
