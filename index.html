@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Apknixy Rewards</title>
+    <style>
+        /* APP-LIKE DESIGN */
+        body { font-family: 'Roboto', sans-serif; margin: 0; padding: 0; background: #f0f2f5; color: #333; -webkit-tap-highlight-color: transparent; }
+        
+        /* HEADER */
+        .header { background: #00C853; color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; }
+        .logo { font-size: 20px; font-weight: 700; letter-spacing: 0.5px; }
+        .menu-btn { font-size: 24px; cursor: pointer; }
+
+        /* MENU DRAWER */
+        .drawer { position: fixed; top: 0; right: -280px; width: 260px; height: 100%; background: white; z-index: 1000; transition: 0.3s; box-shadow: -5px 0 15px rgba(0,0,0,0.1); padding: 20px; }
+        .drawer.open { right: 0; }
+        .drawer-item { padding: 15px 0; border-bottom: 1px solid #eee; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 10px; }
+        .close-drawer { text-align: right; color: red; font-weight: bold; margin-bottom: 20px; cursor: pointer; }
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 900; display: none; }
+
+        /* CONTAINER */
+        .container { padding: 20px; max-width: 500px; margin: 0 auto; }
+        .hidden { display: none !important; }
+
+        /* LOGIN SCREEN */
+        .login-wrap { text-align: center; margin-top: 30vh; }
+        .g-btn { background: white; border: 1px solid #ddd; padding: 12px 25px; border-radius: 50px; font-weight: bold; color: #555; display: inline-flex; align-items: center; gap: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); cursor: pointer; }
+
+        /* DASHBOARD */
+        .wallet-card { background: linear-gradient(135deg, #00C853 0%, #009624 100%); color: white; padding: 30px; border-radius: 20px; text-align: center; box-shadow: 0 10px 20px rgba(0, 200, 83, 0.3); margin-bottom: 25px; }
+        .wallet-label { font-size: 14px; opacity: 0.9; text-transform: uppercase; letter-spacing: 1px; }
+        .wallet-amount { font-size: 48px; font-weight: 700; margin: 10px 0; }
+        
+        .main-btn { background: #FF6D00; color: white; border: none; width: 100%; padding: 18px; border-radius: 15px; font-size: 18px; font-weight: bold; cursor: pointer; box-shadow: 0 5px 15px rgba(255, 109, 0, 0.3); display: flex; align-items: center; justify-content: center; gap: 10px; transition: transform 0.1s; }
+        .main-btn:active { transform: scale(0.98); }
+
+        .notice { font-size: 12px; color: #666; text-align: center; margin-top: 20px; background: #fff; padding: 15px; border-radius: 10px; border: 1px solid #eee; }
+
+        /* FORMS */
+        .form-box { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .inp-field { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 16px; }
+        .action-btn { background: #2962FF; color: white; width: 100%; padding: 12px; border: none; border-radius: 8px; font-weight: bold; font-size: 16px; cursor: pointer; }
+        .cancel-btn { background: transparent; color: #777; width: 100%; padding: 10px; border: none; margin-top: 10px; cursor: pointer; }
+
+        /* ADGEM IFRAME */
+        #ad-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 2000; display: none; flex-direction: column; }
+        .ad-header { padding: 10px; background: #333; color: white; display: flex; justify-content: space-between; align-items: center; }
+        .ad-close { background: red; color: white; padding: 5px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 14px; border: none; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="logo">Apknixy</div>
+        <div class="menu-btn" onclick="toggleDrawer()">☰</div>
+    </div>
+
+    <div class="overlay" id="overlay" onclick="toggleDrawer()"></div>
+    <div class="drawer" id="drawer">
+        <div class="close-drawer" onclick="toggleDrawer()">✖ CLOSE</div>
+        <div class="drawer-item" onclick="showSection('bank')">🏦 Bank Details</div>
+        <div class="drawer-item" onclick="showSection('withdraw')">💸 Withdraw</div>
+        <div class="drawer-item" style="color:red; margin-top:20px;" onclick="logout()">🚪 Logout</div>
+    </div>
+
+    <div class="container">
+
+        <div id="login-view" class="login-wrap">
+            <h2>Start Earning</h2>
+            <p style="color:#777; margin-bottom:30px;">Login to access tasks & wallet.</p>
+            <button class="g-btn" onclick="googleLogin()">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="24">
+                Continue with Google
+            </button>
+        </div>
+
+        <div id="dashboard-view" class="hidden">
+            <div class="wallet-card">
+                <div class="wallet-label">Current Balance</div>
+                <div class="wallet-amount">₹<span id="userBalance">0.00</span></div>
+                <div style="font-size: 12px; opacity: 0.8;">Minimum Withdraw: ₹100</div>
+            </div>
+
+            <button class="main-btn" onclick="openAdGem()">
+                🚀 START TASKS
+            </button>
+
+            <div class="notice">
+                <b>⚠️ Important:</b> Task complete karne ke baad, balance update hone mein <b>12-24 hours</b> lag sakte hain. Admin verify karke manually add karenge.
+            </div>
+        </div>
+
+        <div id="bank-view" class="hidden">
+            <h3>Payment Settings</h3>
+            <div class="form-box">
+                <p style="font-size:12px; color:orange;">Limit: 2 updates per day.</p>
+                <input type="text" id="upiId" class="inp-field" placeholder="Enter UPI ID (e.g. name@paytm)">
+                <input type="text" id="holderName" class="inp-field" placeholder="Account Holder Name">
+                <button class="action-btn" onclick="saveDetails()">Save Details</button>
+                <button class="cancel-btn" onclick="showSection('dashboard')">Cancel</button>
+            </div>
+        </div>
+
+        <div id="withdraw-view" class="hidden">
+            <h3>Withdraw Money</h3>
+            <div class="form-box">
+                <p>Sending to: <b><span id="dispUpi">Not Set</span></b></p>
+                <input type="number" id="wAmount" class="inp-field" placeholder="Amount (Min ₹100)">
+                <button class="action-btn" style="background:#00C853" onclick="requestWithdraw()">Submit Request</button>
+                <button class="cancel-btn" onclick="showSection('dashboard')">Cancel</button>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="ad-modal">
+        <div class="ad-header">
+            <span>AdGem Offerwall</span>
+            <button class="ad-close" onclick="closeAdGem()">✖ Close & Refresh</button>
+        </div>
+        <iframe id="ad-frame" style="width:100%; height:100%; border:none; flex:1;"></iframe>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+
+    <script>
+        // --- CONFIGURATION ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyBXOBu6fmbco27_ugn9pFg2XQ-TaIeNRpY",
+            authDomain: "apknixy-bc9ee.firebaseapp.com",
+            projectId: "apknixy-bc9ee",
+            storageBucket: "apknixy-bc9ee.firebasestorage.app",
+            messagingSenderId: "99276264960",
+            appId: "1:99276264960:web:a4f28913305288544e2ae5"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        let currentUser = null;
+
+        // --- AUTH LOGIC ---
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                currentUser = user;
+                showSection('dashboard');
+                loadData();
+            } else {
+                showSection('login');
+            }
+        });
+
+        function googleLogin() {
+            auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).catch(alert);
+        }
+        function logout() {
+            auth.signOut();
+            toggleDrawer();
+        }
+
+        // --- NAVIGATION ---
+        function toggleDrawer() {
+            document.getElementById('drawer').classList.toggle('open');
+            const overlay = document.getElementById('overlay');
+            overlay.style.display = (overlay.style.display === 'block') ? 'none' : 'block';
+        }
+
+        function showSection(id) {
+            ['login', 'dashboard', 'bank', 'withdraw'].forEach(s => {
+                document.getElementById(s + '-view').classList.add('hidden');
+            });
+            document.getElementById(id + '-view').classList.remove('hidden');
+            
+            // Close drawer if open
+            document.getElementById('drawer').classList.remove('open');
+            document.getElementById('overlay').style.display = 'none';
+        }
+
+        // --- DATA & BANKING ---
+        function loadData() {
+            db.collection('users').doc(currentUser.uid).onSnapshot(doc => {
+                if(doc.exists) {
+                    const d = doc.data();
+                    document.getElementById('userBalance').innerText = (d.balance || 0).toFixed(2);
+                    if(d.upi) {
+                        document.getElementById('upiId').value = d.upi;
+                        document.getElementById('dispUpi').innerText = d.upi;
+                    }
+                    if(d.name) document.getElementById('holderName').value = d.name;
+                }
+            });
+        }
+
+        function saveDetails() {
+            const upi = document.getElementById('upiId').value;
+            const name = document.getElementById('holderName').value;
+            if(!upi || !name) return alert("Please fill all fields");
+
+            const userRef = db.collection('users').doc(currentUser.uid);
+            userRef.get().then(doc => {
+                const today = new Date().toDateString();
+                let count = 0;
+                if(doc.exists && doc.data().lastUpdateDate === today) count = doc.data().updateCount || 0;
+                
+                if(count >= 2) return alert("Daily limit reached (2 updates only).");
+
+                userRef.set({
+                    upi: upi, name: name, email: currentUser.email,
+                    lastUpdateDate: today, updateCount: count + 1
+                }, { merge: true }).then(() => {
+                    alert("Details Saved!"); showSection('dashboard');
+                });
+            });
+        }
+
+        function requestWithdraw() {
+            const amount = parseFloat(document.getElementById('wAmount').value);
+            const current = parseFloat(document.getElementById('userBalance').innerText);
+            
+            if(amount < 100) return alert("Min withdraw is ₹100");
+            if(amount > current) return alert("Insufficient balance");
+            
+            if(confirm(`Withdraw ₹${amount}? 10% fee will be deducted.`)) {
+                db.collection('withdrawals').add({
+                    userId: currentUser.uid,
+                    email: currentUser.email,
+                    amount: amount,
+                    payout: amount * 0.90,
+                    status: 'pending',
+                    date: new Date()
+                }).then(() => {
+                    alert("Request Sent! Admin will verify and pay.");
+                    showSection('dashboard');
+                });
+            }
+        }
+
+        // --- ADGEM INTEGRATION ---
+        function openAdGem() {
+            const appId = "30336"; 
+            if(!currentUser) return;
+            
+            // Player ID ke saath URL
+            const url = `https://api.adgem.com/v1/wall?appid=${appId}&playerid=${currentUser.uid}`;
+            
+            document.getElementById('ad-frame').src = url;
+            document.getElementById('ad-modal').style.display = 'flex';
+        }
+
+        function closeAdGem() {
+            document.getElementById('ad-modal').style.display = 'none';
+            document.getElementById('ad-frame').src = "";
+            loadData();
+        }
+    </script>
+</body>
+</html>
