@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="referrer" content="no-referrer-when-downgrade" />
-    <title>Apknixy - Earn & Watch</title>
+    <title>Apknixy - Watch & Earn</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Poppins', sans-serif; background: #f0f2f5; margin: 0; padding: 0; color: #333; }
-        .container { max-width: 480px; margin: 0 auto; padding: 20px; padding-bottom: 80px; }
+        .container { max-width: 480px; margin: 0 auto; padding: 20px; }
         .hidden { display: none !important; }
         
         /* HEADER */
@@ -26,19 +26,38 @@
         .btn-success { background: #00C853; color: white; }
         .btn-danger { background: white; color: #d32f2f; border: 1px solid #d32f2f; }
         
-        /* ADS AREA */
-        .ad-box { margin: 20px 0; text-align: center; overflow: hidden; }
-        .vast-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
-        .vast-player { background: #000; height: 120px; border-radius: 8px; position: relative; display: flex; align-items: center; justify-content: center; color: #555; overflow: hidden; }
-        .vast-player video { width: 100%; height: 100%; object-fit: cover; }
+        /* SCROLLABLE AD BOX (New Feature) */
+        .scroll-ad-container {
+            height: 500px; /* Fixed height */
+            overflow-y: scroll; /* Vertical Scroll */
+            background: #fff;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            padding: 10px;
+            margin-top: 20px;
+            text-align: center;
+        }
         
-        /* HISTORY TABLE */
+        /* VIDEO PLAYERS GRID */
+        .vast-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 20px; }
+        .vast-player { 
+            background: #000; 
+            height: 150px; /* Thoda bada size */
+            border-radius: 8px; 
+            overflow: hidden; 
+            border: 1px solid #ccc;
+            position: relative;
+        }
+        .vast-player iframe { width: 100%; height: 100%; border: none; }
+        
+        /* BANNER SPACING */
+        .banner-slot { margin: 15px 0; border-bottom: 1px dashed #eee; padding-bottom: 10px; }
+
+        /* HISTORY */
         .history-item { display: flex; justify-content: space-between; padding: 12px; border-bottom: 1px solid #eee; font-size: 14px; }
         .status-pending { color: orange; font-weight: bold; }
         .status-paid { color: green; font-weight: bold; }
         .status-rejected { color: red; font-weight: bold; }
-
-        .payment-notice { background: #fff3cd; color: #856404; padding: 15px; border-radius: 10px; font-size: 13px; margin-bottom: 20px; border-left: 5px solid #ffc107; }
         
         /* MENU */
         .drawer { position: fixed; top: 0; right: -100%; width: 250px; height: 100%; background: white; z-index: 1000; transition: 0.3s; padding: 20px; box-shadow: -5px 0 15px rgba(0,0,0,0.1); }
@@ -73,49 +92,78 @@
                 <button class="btn btn-danger" onclick="openSmartLink()">📲 INSTALL & EARN</button>
             </div>
 
-            <div class="ad-box">
-                <script>
-                (function(odwi){
-                var d = document, s = d.createElement('script'), l = d.scripts[d.scripts.length - 1];
-                s.settings = odwi || {};
-                s.src = "\/\/swiftvolume.com\/byXaVCsWd.GZlE0iYuWbcT\/YeVmm9suUZVUglKk\/P\/TIYz3uM\/zLgSxqMCTEYxt-NGjdcOz\/OpDcENxvNewl";
-                s.async = true; s.referrerPolicy = 'no-referrer-when-downgrade';
-                l.parentNode.insertBefore(s, l);
-                })({})
-                </script>
-            </div>
+            <h3>⚡ Ad Zone (Scroll Down)</h3>
+            <div class="scroll-ad-container">
+                
+                <p style="font-size:12px; color:gray;">Sponsored Ads</p>
 
-            <div class="ad-box">
-                <script>
-                (function(rbtsgm){
-                var d = document, s = d.createElement('script'), l = d.scripts[d.scripts.length - 1];
-                s.settings = rbtsgm || {};
-                s.src = "\/\/swiftvolume.com\/bOXaV.sRdPGZlZ0lY\/Wxcx\/de\/mV9lu\/ZIUKl-kxPDTnYZ3WMgzcguxJMCjjAQtkNwjmcVzAOCDOEZyhM\/QT";
-                s.async = true; s.referrerPolicy = 'no-referrer-when-downgrade';
-                l.parentNode.insertBefore(s, l);
-                })({})
-                </script>
-            </div>
+                <div class="banner-slot">
+                    <script>
+                    (function(odwi){
+                    var d = document, s = d.createElement('script'), l = d.scripts[d.scripts.length - 1];
+                    s.settings = odwi || {};
+                    s.src = "\/\/swiftvolume.com\/byXaVCsWd.GZlE0iYuWbcT\/YeVmm9suUZVUglKk\/P\/TIYz3uM\/zLgSxqMCTEYxt-NGjdcOz\/OpDcENxvNewl";
+                    s.async = true; s.referrerPolicy = 'no-referrer-when-downgrade';
+                    l.parentNode.insertBefore(s, l);
+                    })({})
+                    </script>
+                </div>
 
-            <h3>📺 Sponsored Videos</h3>
-            <div class="vast-grid">
-                <div class="vast-player" id="player1">Loading Ad 1...</div>
-                <div class="vast-player" id="player2">Loading Ad 2...</div>
-                <div class="vast-player" id="player3">Loading Ad 3...</div>
-                <div class="vast-player" id="player4">Loading Ad 4...</div>
+                <div class="vast-grid">
+                    <div class="vast-player"><iframe id="frame1"></iframe></div>
+                    <div class="vast-player"><iframe id="frame2"></iframe></div>
+                    <div class="vast-player"><iframe id="frame3"></iframe></div>
+                    <div class="vast-player"><iframe id="frame4"></iframe></div>
+                </div>
+
+                <div class="banner-slot">
+                    <script>
+                    (function(rbtsgm){
+                    var d = document, s = d.createElement('script'), l = d.scripts[d.scripts.length - 1];
+                    s.settings = rbtsgm || {};
+                    s.src = "\/\/swiftvolume.com\/bOXaV.sRdPGZlZ0lY\/Wxcx\/de\/mV9lu\/ZIUKl-kxPDTnYZ3WMgzcguxJMCjjAQtkNwjmcVzAOCDOEZyhM\/QT";
+                    s.async = true; s.referrerPolicy = 'no-referrer-when-downgrade';
+                    l.parentNode.insertBefore(s, l);
+                    })({})
+                    </script>
+                </div>
+
+                <div class="banner-slot">
+                     <script>
+                    (function(odwi){
+                    var d = document, s = d.createElement('script'), l = d.scripts[d.scripts.length - 1];
+                    s.settings = odwi || {};
+                    s.src = "\/\/swiftvolume.com\/byXaVCsWd.GZlE0iYuWbcT\/YeVmm9suUZVUglKk\/P\/TIYz3uM\/zLgSxqMCTEYxt-NGjdcOz\/OpDcENxvNewl";
+                    s.async = true; s.referrerPolicy = 'no-referrer-when-downgrade';
+                    l.parentNode.insertBefore(s, l);
+                    })({})
+                    </script>
+                </div>
+
+                 <div class="banner-slot">
+                    <script>
+                    (function(rbtsgm){
+                    var d = document, s = d.createElement('script'), l = d.scripts[d.scripts.length - 1];
+                    s.settings = rbtsgm || {};
+                    s.src = "\/\/swiftvolume.com\/bOXaV.sRdPGZlZ0lY\/Wxcx\/de\/mV9lu\/ZIUKl-kxPDTnYZ3WMgzcguxJMCjjAQtkNwjmcVzAOCDOEZyhM\/QT";
+                    s.async = true; s.referrerPolicy = 'no-referrer-when-downgrade';
+                    l.parentNode.insertBefore(s, l);
+                    })({})
+                    </script>
+                </div>
+
             </div>
-            <p style="text-align:center; font-size:10px; color:#999;">Ads auto-rotate for maximum revenue.</p>
-        </div>
+            </div>
 
         <div id="withdraw-view" class="hidden">
             <div class="card">
                 <h3>Withdraw Money</h3>
-                <div class="payment-notice">
-                    ℹ️ <b>Payment Policy:</b> Money will be transferred within <b>0-7 days</b>. If not received, it will be processed in the next <b>7-14 day</b> cycle in bulk.
+                <div style="background:#fff3cd; color:#856404; padding:10px; border-radius:5px; font-size:12px; margin-bottom:15px;">
+                    Payment Time: <b>0-7 Days</b>.<br>If delayed, it will process in next 7-14 days cycle.
                 </div>
                 
                 <p>Withdraw to: <b><span id="dispUpi" style="color:#00C853">Not Set</span></b></p>
-                <input type="text" id="upiInput" placeholder="Set UPI ID (First Time)" class="btn" style="background:#f9f9f9; border:1px solid #ddd; display:none;">
+                <input type="text" id="upiInput" placeholder="Set UPI ID" class="btn" style="background:#f9f9f9; border:1px solid #ddd; display:none;">
                 <button class="btn btn-primary" id="saveUpiBtn" onclick="saveUpi()" style="display:none;">Save UPI</button>
 
                 <input type="number" id="wAmount" placeholder="Enter Amount (Min ₹200)" class="btn" style="background:#fff; border:1px solid #ccc; text-align:left;">
@@ -165,7 +213,7 @@
                 currentUser = user;
                 showSection('dashboard');
                 loadData();
-                startVastCycle(); // Start VAST ads
+                runAds(); // Start all ads loop
             } else {
                 showSection('login');
             }
@@ -181,13 +229,12 @@
             document.getElementById('withdraw-view').classList.add('hidden');
             document.getElementById('drawer').classList.remove('open');
             
-            if(id === 'history') id = 'withdraw'; // Show history in withdraw section
+            if(id === 'history') id = 'withdraw'; 
             document.getElementById(id + '-view').classList.remove('hidden');
 
             if(id === 'withdraw') loadHistory();
         }
 
-        // DATA & SMART LINK
         function loadData() {
             db.collection('users').doc(currentUser.uid).onSnapshot(doc => {
                 if(doc.exists) {
@@ -219,33 +266,24 @@
             window.open(finalUrl, '_blank');
         }
 
-        // WITHDRAWAL LOGIC
         function requestWithdraw() {
             const amount = parseFloat(document.getElementById('wAmount').value);
             const currentBal = parseFloat(document.getElementById('userBalance').innerText);
             
             if(amount < 200) return alert("Minimum withdrawal is ₹200");
             if(amount > currentBal) return alert("Insufficient Balance");
-            
             const upiText = document.getElementById('dispUpi').innerText;
             if(upiText === "Not Set") return alert("Please set UPI ID first");
 
-            if(confirm(`Withdraw ₹${amount}? It will be deducted from your balance.`)) {
-                // 1. Deduct Balance
+            if(confirm(`Withdraw ₹${amount}?`)) {
                 db.collection('users').doc(currentUser.uid).update({
                     balance: firebase.firestore.FieldValue.increment(-amount)
                 }).then(() => {
-                    // 2. Create Request
                     db.collection('withdrawals').add({
-                        userId: currentUser.uid,
-                        email: currentUser.email,
-                        name: currentUser.displayName,
-                        upi: upiText,
-                        amount: amount,
-                        status: 'pending',
-                        date: new Date()
+                        userId: currentUser.uid, email: currentUser.email, name: currentUser.displayName,
+                        upi: upiText, amount: amount, status: 'pending', date: new Date()
                     }).then(() => {
-                        alert("Withdrawal Successful! Check history.");
+                        alert("Request Sent! Check history.");
                         document.getElementById('wAmount').value = "";
                         loadHistory();
                     });
@@ -256,62 +294,40 @@
         function loadHistory() {
             const list = document.getElementById('historyList');
             list.innerHTML = "<p>Loading...</p>";
-            
-            db.collection('withdrawals')
-              .where("userId", "==", currentUser.uid)
-              .orderBy("date", "desc")
-              .limit(10)
-              .get().then(snap => {
+            db.collection('withdrawals').where("userId", "==", currentUser.uid).orderBy("date", "desc").limit(10).get().then(snap => {
                 list.innerHTML = "";
                 if(snap.empty) { list.innerHTML = "<p>No history found.</p>"; return; }
-                
                 snap.forEach(doc => {
                     const d = doc.data();
-                    let colorClass = "";
-                    if(d.status === 'pending') colorClass = "status-pending";
-                    else if(d.status === 'paid') colorClass = "status-paid";
-                    else colorClass = "status-rejected";
-
-                    const row = `
-                        <div class="history-item">
-                            <div>
-                                <b>₹${d.amount}</b><br>
-                                <small>${new Date(d.date.seconds*1000).toLocaleDateString()}</small>
-                            </div>
-                            <div class="${colorClass}">
-                                ${d.status.toUpperCase()}
-                            </div>
-                        </div>
-                    `;
-                    list.innerHTML += row;
+                    let colorClass = d.status === 'pending' ? "status-pending" : (d.status === 'paid' ? "status-paid" : "status-rejected");
+                    list.innerHTML += `<div class="history-item"><div><b>₹${d.amount}</b><br><small>${new Date(d.date.seconds*1000).toLocaleDateString()}</small></div><div class="${colorClass}">${d.status.toUpperCase()}</div></div>`;
                 });
             });
         }
 
-        // VAST ADS SIMULATION (Rotating Players)
-        // Since VAST XML needs a parser, we will iframe the URL user gave or cycle logic
-        function startVastCycle() {
+        // --- NEW ADS LOGIC (CONTINUOUS LOOP) ---
+        function runAds() {
+            const frames = ['frame1', 'frame2', 'frame3', 'frame4'];
             const vastUrl = "https://physicaldad.com/ddm.F/zjdPGpNhvqZ/GBUa/IezmO9hulZiUxldk/PVTwYt3JMNz/gJxDMMjmM/taNsjzcVzdOpDlEJyTNGCmZ-saaHWb1FpZdkDh0kxW";
-            const players = ['player1', 'player2', 'player3', 'player4'];
-            let active = 0;
 
-            setInterval(() => {
-                // Logic: Load VAST in one iframe, clear others
-                // NOTE: Raw VAST XML needs a player like JWPlayer/IMA. 
-                // Here we simply load the URL assuming it might redirect to media, 
-                // or we act as placeholders for the Hilltop scripts.
+            // Function to reload specific frame
+            function reloadFrame(frameId) {
+                const iframe = document.getElementById(frameId);
+                // Adding timestamp to force reload (Cache busting)
+                iframe.src = vastUrl + "&t=" + new Date().getTime(); 
+            }
+
+            // Start all 4 players immediately
+            frames.forEach((id, index) => {
+                reloadFrame(id);
                 
-                // Visual simulation of cycling
-                document.getElementById(players[active]).style.border = "2px solid #00C853";
-                document.getElementById(players[active]).innerHTML = `<iframe src="${vastUrl}" width="100%" height="100%" frameborder="0"></iframe>`;
-                
-                // Clear previous
-                let prev = active === 0 ? 3 : active - 1;
-                document.getElementById(players[prev]).style.border = "none";
-                document.getElementById(players[prev]).innerHTML = "Ad Loading...";
-                
-                active = (active + 1) % 4;
-            }, 5000); // Change every 5 seconds
+                // Set Interval for loop (Har 20-25 seconds mein reload hoga)
+                // Random time taki sab ek saath na refresh ho (Natural lage)
+                const randomTime = 20000 + (Math.random() * 5000); 
+                setInterval(() => {
+                    reloadFrame(id);
+                }, randomTime);
+            });
         }
     </script>
 </body>
