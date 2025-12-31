@@ -1,50 +1,68 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Apknixy - Admin</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apknixy Admin</title>
     <style>
         body { font-family: sans-serif; padding: 20px; background: #eee; }
-        .box { background: white; padding: 15px; margin-bottom: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        input, button { padding: 10px; margin: 5px 0; width: 100%; box-sizing: border-box; }
-        button { background: #333; color: white; border: none; cursor: pointer; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 14px; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-        th { background: #4CAF50; color: white; }
+        .box { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        input, button { padding: 12px; margin: 5px 0; width: 100%; box-sizing: border-box; }
+        .btn-green { background: #00C853; color: white; border: none; cursor: pointer; }
+        .btn-red { background: #d32f2f; color: white; border: none; cursor: pointer; }
+        .btn-blue { background: #2962FF; color: white; border: none; cursor: pointer; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; background: white; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #333; color: white; }
+        
+        .badge { padding: 5px 10px; border-radius: 5px; color: white; font-size: 12px; }
+        .bg-pending { background: orange; }
+        .bg-paid { background: green; }
+        .bg-rejected { background: red; }
     </style>
 </head>
 <body>
 
-    <h2>👮 Admin Panel</h2>
-    <div id="login-box" class="box">
-        <p>Login with <b>apknixy@gmail.com</b></p>
-        <button onclick="adminLogin()">Login via Google</button>
+    <h2>👮 Super Admin Panel</h2>
+    
+    <div id="login-section" class="box">
+        <p>Login Authorized Personnel Only</p>
+        <button class="btn-blue" onclick="adminLogin()">Login via Google</button>
     </div>
 
-    <div id="dashboard" class="box" style="display:none;">
+    <div id="admin-dashboard" class="box" style="display:none;">
         
-        <h3>🔍 Find User & Add Money</h3>
-        <input type="text" id="uEmail" placeholder="Enter User Email">
-        <button onclick="findUser()" style="background:#2196F3">Search User</button>
-        
-        <div id="userResult" style="margin-top:10px; padding:10px; background:#f9f9f9; border:1px solid #ddd; display:none;">
-            <p><b>User:</b> <span id="resEmail"></span></p>
-            <p><b>Balance:</b> ₹<span id="resBal"></span></p>
-            <button onclick="addMoney(50)" style="background:green">+ Add ₹50</button>
-            <button onclick="addMoney(100)" style="background:green">+ Add ₹100</button>
-            <button onclick="addMoney(500)" style="background:green">+ Add ₹500</button>
-        </div>
+        <h3>🔍 Search User & Withdrawals</h3>
+        <input type="text" id="searchInput" placeholder="Enter User Email or Name">
+        <button class="btn-blue" onclick="searchData()">Search</button>
 
-        <hr>
-
-        <h3>🏦 Withdrawal Requests</h3>
-        <button onclick="loadWithdrawals()">🔄 Refresh List</button>
-        <div style="overflow-x:auto;">
-            <table id="wTable">
-                <thead><tr><th>Date</th><th>Email</th><th>Pay (₹)</th><th>Status</th><th>Action</th></tr></thead>
-                <tbody id="wList"></tbody>
+        <div id="userResult" style="margin-top:20px; display:none; border:1px solid #ccc; padding:15px; background:#f9f9f9;">
+            <h4>👤 User Details</h4>
+            <p><b>Name:</b> <span id="uName"></span></p>
+            <p><b>Email:</b> <span id="uEmail"></span></p>
+            <p><b>UPI:</b> <span id="uUpi"></span></p>
+            <p><b>Wallet Balance:</b> ₹<span id="uBal" style="font-weight:bold; color:green;"></span></p>
+            <hr>
+            <h4>🏦 User's Withdrawal Requests</h4>
+            <table id="uWithdrawTable">
+                <thead>
+                    <tr><th>Date</th><th>Amount</th><th>Status</th><th>Action</th></tr>
+                </thead>
+                <tbody id="uWithdrawList"></tbody>
             </table>
         </div>
+
+        <hr style="margin: 30px 0;">
+
+        <h3>⚡ All Pending Requests (Global)</h3>
+        <button onclick="loadPending()" style="width:auto; padding:5px 15px;">Refresh List</button>
+        <table id="globalTable">
+            <thead>
+                <tr><th>User</th><th>UPI</th><th>Amount</th><th>Status</th><th>Actions</th></tr>
+            </thead>
+            <tbody id="globalList"></tbody>
+        </table>
 
     </div>
 
@@ -64,84 +82,111 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
         const auth = firebase.auth();
-        let currentUserId = null;
 
         function adminLogin() {
             auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).then(res => {
                 if(res.user.email === "apknixy@gmail.com") {
-                    document.getElementById('login-box').style.display = 'none';
-                    document.getElementById('dashboard').style.display = 'block';
-                    loadWithdrawals();
+                    document.getElementById('login-section').style.display = 'none';
+                    document.getElementById('admin-dashboard').style.display = 'block';
+                    loadPending();
                 } else {
-                    alert("Access Denied! Only apknixy@gmail.com allowed.");
+                    alert("Access Denied! Not Admin.");
                     auth.signOut();
                 }
             });
         }
 
-        // --- ADD MONEY ---
-        function findUser() {
-            const email = document.getElementById('uEmail').value;
-            db.collection('users').where('email', '==', email).get().then(snap => {
+        // --- SEARCH LOGIC ---
+        function searchData() {
+            const query = document.getElementById('searchInput').value.trim();
+            if(!query) return alert("Enter email to search");
+
+            // 1. Find User by Email
+            db.collection('users').where('email', '==', query).get().then(snap => {
                 if(snap.empty) return alert("User not found!");
-                const doc = snap.docs[0];
-                currentUserId = doc.id;
-                document.getElementById('resEmail').innerText = doc.data().email;
-                document.getElementById('resBal').innerText = (doc.data().balance || 0).toFixed(2);
+                
+                const userDoc = snap.docs[0];
+                const userData = userDoc.data();
+                const userId = userDoc.id;
+
+                // Show User Data
                 document.getElementById('userResult').style.display = 'block';
+                document.getElementById('uName').innerText = userData.name || "N/A";
+                document.getElementById('uEmail').innerText = userData.email;
+                document.getElementById('uUpi').innerText = userData.upi || "Not Set";
+                document.getElementById('uBal').innerText = (userData.balance || 0).toFixed(2);
+
+                // 2. Fetch Withdrawals for this User
+                fetchUserWithdrawals(userId);
             });
         }
 
-        function addMoney(amount) {
-            if(!currentUserId) return;
-            if(confirm(`Add ₹${amount} to this user?`)) {
-                db.collection('users').doc(currentUserId).get().then(doc => {
-                    const newBal = (doc.data().balance || 0) + amount;
-                    db.collection('users').doc(currentUserId).update({ balance: newBal }).then(() => {
-                        alert("Money Added!");
-                        findUser(); // Refresh display
-                    });
-                });
-            }
-        }
-
-        // --- WITHDRAWALS ---
-        function loadWithdrawals() {
-            const list = document.getElementById('wList');
+        function fetchUserWithdrawals(userId) {
+            const list = document.getElementById('uWithdrawList');
             list.innerHTML = "";
-            db.collection('withdrawals').orderBy('date', 'desc').limit(20).get().then(snap => {
-                snap.forEach(doc => {
-                    const d = doc.data();
-                    const row = `<tr>
+            
+            db.collection('withdrawals')
+              .where('userId', '==', userId)
+              .orderBy('date', 'desc')
+              .get().then(snap => {
+                  if(snap.empty) { list.innerHTML = "<tr><td colspan='4'>No requests found</td></tr>"; return; }
+                  
+                  snap.forEach(doc => {
+                      const d = doc.data();
+                      const row = `<tr>
                         <td>${new Date(d.date.seconds*1000).toLocaleDateString()}</td>
-                        <td>${d.email}</td>
-                        <td style="font-weight:bold; color:green">₹${d.payout}</td>
-                        <td>${d.status}</td>
+                        <td>₹${d.amount}</td>
+                        <td><span class="badge bg-${d.status}">${d.status}</span></td>
                         <td>
-                            ${d.status === 'pending' ? 
-                            `<button onclick="payUser('${doc.id}', '${d.userId}', ${d.amount})" style="background:#FF9800; font-size:12px;">✅ Mark Paid</button>` 
-                            : 'Done'}
+                            ${d.status === 'pending' ? getActionButtons(doc.id) : 'Completed'}
                         </td>
-                    </tr>`;
-                    list.innerHTML += row;
-                });
-            });
+                      </tr>`;
+                      list.innerHTML += row;
+                  });
+              });
         }
 
-        function payUser(docId, userId, amount) {
-            if(confirm("Confirm that you have sent UPI payment? This will deduct user balance.")) {
-                db.collection('users').doc(userId).get().then(uDoc => {
-                    const curBal = uDoc.data().balance || 0;
-                    if(curBal < amount) return alert("Error: User balance is less than withdrawal amount!");
+        // --- GLOBAL LIST ---
+        function loadPending() {
+            const list = document.getElementById('globalList');
+            list.innerHTML = "";
+            
+            db.collection('withdrawals')
+              .where('status', '==', 'pending')
+              .get().then(snap => {
+                  snap.forEach(doc => {
+                      const d = doc.data();
+                      const row = `<tr>
+                        <td>${d.email}<br><small>${d.name}</small></td>
+                        <td>${d.upi}</td>
+                        <td style="font-weight:bold">₹${d.amount}</td>
+                        <td><span class="badge bg-pending">Pending</span></td>
+                        <td>${getActionButtons(doc.id)}</td>
+                      </tr>`;
+                      list.innerHTML += row;
+                  });
+              });
+        }
 
-                    // 1. Deduct Balance
-                    db.collection('users').doc(userId).update({ balance: curBal - amount }).then(() => {
-                        // 2. Update Status
-                        db.collection('withdrawals').doc(docId).update({ status: 'paid' }).then(() => {
-                            alert("Success! Balance deducted and marked paid.");
-                            loadWithdrawals();
-                        });
-                    });
+        // --- ACTION BUTTONS HTML ---
+        function getActionButtons(docId) {
+            return `
+                <button onclick="updateStatus('${docId}', 'paid')" class="btn-green" style="width:auto; padding:5px;">✅ Paid</button>
+                <button onclick="updateStatus('${docId}', 'rejected')" class="btn-red" style="width:auto; padding:5px;">❌ Reject</button>
+            `;
+        }
+
+        // --- UPDATE STATUS LOGIC ---
+        function updateStatus(docId, newStatus) {
+            if(confirm(`Mark this request as ${newStatus.toUpperCase()}?`)) {
+                db.collection('withdrawals').doc(docId).update({
+                    status: newStatus
+                }).then(() => {
+                    alert("Status Updated!");
+                    // Refresh data
+                    loadPending();
+                    const searchVal = document.getElementById('searchInput').value;
+                    if(searchVal) searchData(); 
                 });
             }
         }
