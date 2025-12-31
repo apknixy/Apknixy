@@ -2,253 +2,293 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Earn Pro - Install & Earn</title>
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Apknixy Rewards</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
-        body { font-family: 'Poppins', sans-serif; background-color: #121212; color: white; }
-        .card { background: #1e1e1e; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
-        .gold-text { color: #FFD700; }
-        .hidden { display: none; }
-        .loader { border: 4px solid #f3f3f3; border-top: 4px solid #3498db; border-radius: 50%; width: 30px; height: 30px; animation: spin 2s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        /* PROFESSIONAL APP UI */
+        body { font-family: 'Poppins', sans-serif; margin: 0; padding: 0; background: #f4f7fa; color: #333; -webkit-tap-highlight-color: transparent; }
+        
+        /* HEADER */
+        .header { background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); color: white; padding: 18px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .logo { font-size: 22px; font-weight: 700; letter-spacing: 0.5px; }
+        .menu-btn { font-size: 26px; cursor: pointer; }
+
+        /* DRAWER MENU */
+        .drawer { position: fixed; top: 0; right: -280px; width: 260px; height: 100%; background: white; z-index: 1000; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); padding: 25px; box-shadow: -5px 0 25px rgba(0,0,0,0.15); }
+        .drawer.open { right: 0; }
+        .drawer-item { padding: 15px 0; border-bottom: 1px solid #f0f0f0; font-weight: 600; color: #444; cursor: pointer; display: flex; align-items: center; gap: 12px; font-size: 15px; }
+        .close-drawer { text-align: right; color: #ff4757; font-weight: bold; margin-bottom: 30px; cursor: pointer; font-size: 14px; text-transform: uppercase; }
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 900; display: none; backdrop-filter: blur(2px); }
+
+        /* CONTAINER */
+        .container { padding: 20px; max-width: 480px; margin: 0 auto; }
+        .hidden { display: none !important; }
+
+        /* LOGIN SCREEN */
+        .login-wrap { text-align: center; margin-top: 25vh; }
+        .login-card { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
+        .g-btn { background: white; border: 1px solid #e1e1e1; padding: 14px 25px; border-radius: 50px; font-weight: 600; color: #555; display: inline-flex; align-items: center; gap: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); cursor: pointer; transition: 0.2s; width: 100%; justify-content: center; }
+        .g-btn:active { transform: scale(0.98); background: #f9f9f9; }
+
+        /* DASHBOARD */
+        .wallet-card { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; padding: 30px; border-radius: 24px; text-align: center; box-shadow: 0 10px 25px rgba(56, 239, 125, 0.4); margin-bottom: 25px; position: relative; overflow: hidden; }
+        .wallet-label { font-size: 14px; opacity: 0.95; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 600; }
+        .wallet-amount { font-size: 52px; font-weight: 700; margin: 10px 0; text-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        
+        .main-btn { background: linear-gradient(to right, #FF512F 0%, #DD2476 51%, #FF512F 100%); background-size: 200% auto; color: white; border: none; width: 100%; padding: 20px; border-radius: 18px; font-size: 18px; font-weight: 700; cursor: pointer; box-shadow: 0 10px 20px rgba(221, 36, 118, 0.3); display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.5s; }
+        .main-btn:active { transform: scale(0.97); }
+
+        .notice-box { background: white; border-radius: 16px; padding: 20px; margin-top: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: center; border: 1px solid #eee; }
+        .step-title { font-weight: bold; color: #1e3c72; margin-bottom: 10px; display: block; }
+        .step-text { font-size: 13px; color: #666; line-height: 1.6; }
+
+        /* FORMS */
+        .form-box { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
+        .inp-label { font-size: 13px; font-weight: 600; color: #777; margin-bottom: 8px; display: block; margin-left: 5px; }
+        .inp-field { width: 100%; padding: 15px; margin-bottom: 20px; border: 2px solid #f0f0f0; border-radius: 12px; box-sizing: border-box; font-size: 16px; background: #fafafa; transition: 0.3s; font-family: 'Poppins', sans-serif; }
+        .inp-field:focus { border-color: #2a5298; background: white; outline: none; }
+        
+        .action-btn { background: #2a5298; color: white; width: 100%; padding: 16px; border: none; border-radius: 12px; font-weight: 700; font-size: 16px; cursor: pointer; box-shadow: 0 4px 12px rgba(42, 82, 152, 0.3); }
+        .cancel-btn { background: transparent; color: #888; width: 100%; padding: 12px; border: none; margin-top: 10px; cursor: pointer; font-weight: 600; }
+
+        .notification { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #333; color: white; padding: 12px 24px; border-radius: 50px; font-size: 14px; z-index: 2000; display: none; box-shadow: 0 5px 15px rgba(0,0,0,0.2); width: 80%; text-align: center; }
     </style>
 </head>
-<body class="flex flex-col min-h-screen">
+<body>
 
-    <div id="login-screen" class="flex flex-col items-center justify-center h-screen w-full">
-        <div class="card p-8 text-center max-w-sm w-full">
-            <div class="mb-5 text-4xl text-blue-500"><i class="fa-solid fa-sack-dollar"></i></div>
-            <h1 class="text-2xl font-bold mb-2">Welcome to EarnPro</h1>
-            <p class="text-gray-400 mb-6">Sign in to start earning from Apps</p>
-            <button onclick="googleLogin()" class="w-full bg-white text-gray-900 font-bold py-3 px-4 rounded-lg flex items-center justify-center gap-2 hover:bg-gray-200 transition">
-                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" class="w-5 h-5">
-                Sign in with Google
+    <div class="header">
+        <div class="logo">Apknixy</div>
+        <div class="menu-btn" onclick="toggleDrawer()">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </div>
+    </div>
+
+    <div class="overlay" id="overlay" onclick="toggleDrawer()"></div>
+    <div class="drawer" id="drawer">
+        <div class="close-drawer" onclick="toggleDrawer()">Close Menu ✕</div>
+        <div class="drawer-item" onclick="showSection('bank')">🏦 Bank Details</div>
+        <div class="drawer-item" onclick="showSection('withdraw')">💸 Withdraw Money</div>
+        <div class="drawer-item" style="color:#ff4757; margin-top:30px;" onclick="logout()">🚪 Secure Logout</div>
+    </div>
+
+    <div class="container">
+
+        <div id="login-view" class="login-wrap">
+            <div class="login-card">
+                <h2 style="color:#1e3c72; margin-bottom:10px;">Welcome Back</h2>
+                <p style="color:#888; margin-bottom:30px; font-size:14px;">Sign in to start earning from Apps.</p>
+                <button class="g-btn" onclick="googleLogin()">
+                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="22">
+                    Continue with Google
+                </button>
+            </div>
+        </div>
+
+        <div id="dashboard-view" class="hidden">
+            <div class="wallet-card">
+                <div class="wallet-label">Your Wallet</div>
+                <div class="wallet-amount">₹<span id="userBalance">0.00</span></div>
+                <div style="font-size: 12px; opacity: 0.85; background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 20px; display: inline-block;">Daily Payouts</div>
+            </div>
+
+            <button class="main-btn" onclick="openSmartLink()">
+                🚀 INSTALL APPS & EARN
             </button>
-        </div>
-    </div>
 
-    <div id="dashboard" class="hidden w-full max-w-md mx-auto p-4 pb-20">
-        
-        <div class="flex justify-between items-center mb-6 mt-2">
-            <div>
-                <p class="text-gray-400 text-sm">Hello,</p>
-                <h2 id="username" class="text-xl font-bold">User</h2>
+            <div class="notice-box">
+                <span class="step-title">⚡ How it works:</span>
+                <p class="step-text">
+                    1. Click button & Install the App.<br>
+                    2. Open the App for 30 seconds.<br>
+                    3. <b>Wait 24 Hours:</b> We verify manually.<br>
+                    4. Money is added to wallet after verification.
+                </p>
             </div>
-            <div onclick="logout()" class="text-red-500 text-sm cursor-pointer"><i class="fa-solid fa-power-off"></i> Logout</div>
         </div>
 
-        <div class="card p-6 mb-6 bg-gradient-to-r from-blue-900 to-blue-700 relative overflow-hidden">
-            <p class="text-blue-200 text-sm">Total Balance</p>
-            <h1 class="text-4xl font-bold mt-1">₹ <span id="balance">0.00</span></h1>
-            <p class="text-xs text-blue-300 mt-2">Withdrawals are processed every 24 hours.</p>
-            <i class="fa-solid fa-wallet absolute -bottom-4 -right-4 text-8xl text-blue-500 opacity-20"></i>
-        </div>
-
-        <div class="flex gap-2 mb-6">
-            <button onclick="showTab('earn')" id="btn-earn" class="flex-1 bg-blue-600 py-2 rounded-lg font-semibold">Tasks</button>
-            <button onclick="showTab('wallet')" id="btn-wallet" class="flex-1 bg-gray-800 py-2 rounded-lg font-semibold text-gray-400">Wallet & Bank</button>
-        </div>
-
-        <div id="tab-earn">
-            <h3 class="text-lg font-bold mb-4">CPI Tasks (High Payout)</h3>
-            
-            <div class="card p-4 mb-4 flex items-center justify-between border border-gray-700">
-                <div class="flex items-center gap-3">
-                    <div class="bg-green-900 p-3 rounded-full text-green-400">
-                        <i class="fa-brands fa-android text-xl"></i>
-                    </div>
-                    <div>
-                        <h4 class="font-bold">Premium App Install</h4>
-                        <p class="text-xs text-gray-400">Install & Open for 30 sec</p>
-                    </div>
-                </div>
-                <div class="text-right">
-                    <span class="block gold-text font-bold">+ ₹50.00</span>
-                    <button onclick="openSmartLink()" class="mt-1 bg-blue-600 text-xs px-3 py-1 rounded hover:bg-blue-500">
-                        Start
-                    </button>
-                </div>
+        <div id="bank-view" class="hidden">
+            <h3 style="color:#1e3c72; margin-bottom:20px;">Payment Profile</h3>
+            <div class="form-box">
+                <p style="font-size:12px; color:#ff9800; background:#fff3e0; padding:10px; border-radius:8px; margin-bottom:20px;">⚠️ Security: You can update details only 2 times per day.</p>
+                
+                <label class="inp-label">UPI ID</label>
+                <input type="text" id="upiId" class="inp-field" placeholder="e.g. 98765xxxxx@ybl">
+                
+                <label class="inp-label">Account Holder Name</label>
+                <input type="text" id="holderName" class="inp-field" placeholder="Name as per Bank">
+                
+                <button class="action-btn" onclick="saveDetails()">Save Information</button>
+                <button class="cancel-btn" onclick="showSection('dashboard')">Go Back</button>
             </div>
-
-            <p class="text-xs text-center text-gray-500 mt-4">
-                <i class="fa-solid fa-circle-info"></i> Install hone ke baad paise automatically add hone mein 10-15 min lag sakte hain.
-            </p>
         </div>
 
-        <div id="tab-wallet" class="hidden">
-            <h3 class="text-lg font-bold mb-4">Payment Details</h3>
-            
-            <div class="card p-5 space-y-4">
-                <div>
-                    <label class="text-xs text-gray-400">Account Holder Name</label>
-                    <input type="text" id="bankName" class="w-full bg-gray-900 border border-gray-700 rounded p-2 mt-1 focus:outline-none focus:border-blue-500" placeholder="e.g. Rahul Kumar">
+        <div id="withdraw-view" class="hidden">
+            <h3 style="color:#1e3c72; margin-bottom:20px;">Withdraw Funds</h3>
+            <div class="form-box">
+                <div style="text-align:center; margin-bottom:20px;">
+                    <p style="color:#666; font-size:14px;">Sending Payment to:</p>
+                    <p style="font-weight:bold; font-size:18px; color:#1e3c72;" id="dispUpi">Update in Bank Settings</p>
                 </div>
-                <div>
-                    <label class="text-xs text-gray-400">UPI ID / Bank Account</label>
-                    <input type="text" id="bankUpi" class="w-full bg-gray-900 border border-gray-700 rounded p-2 mt-1 focus:outline-none focus:border-blue-500" placeholder="e.g. rahul@okaxis">
-                </div>
-                <div>
-                    <label class="text-xs text-gray-400">IFSC Code (Optional)</label>
-                    <input type="text" id="bankIfsc" class="w-full bg-gray-900 border border-gray-700 rounded p-2 mt-1 focus:outline-none focus:border-blue-500">
-                </div>
-                <button onclick="saveBankDetails()" class="w-full bg-green-600 py-2 rounded font-bold hover:bg-green-500 mt-2">Save Details</button>
-            </div>
 
-            <h3 class="text-lg font-bold mt-6 mb-2">Request Withdrawal</h3>
-            <div class="card p-5 text-center">
-                <p class="text-gray-400 text-sm mb-4">Minimum withdrawal limit: ₹100</p>
-                <button onclick="requestWithdraw()" class="w-full bg-gray-700 py-3 rounded text-gray-400 cursor-not-allowed">Withdraw Money</button>
+                <label class="inp-label">Amount (₹)</label>
+                <input type="number" id="wAmount" class="inp-field" placeholder="Min Withdraw: ₹100">
+                
+                <button class="action-btn" style="background:#11998e" onclick="requestWithdraw()">Submit Request</button>
+                <button class="cancel-btn" onclick="showSection('dashboard')">Cancel</button>
             </div>
         </div>
 
     </div>
 
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <div id="toast" class="notification"></div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 
     <script>
-        // ---------------------------------------------------------
-        // 1. FIREBASE CONFIGURATION (Yahan apni Details Dalein)
-        // ---------------------------------------------------------
+        // --- 1. FIREBASE CONFIGURATION (Apni purani config yahan dalein) ---
         const firebaseConfig = {
-            apiKey: "YOUR_API_KEY_HERE",
-            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_PROJECT_ID.appspot.com",
-            messagingSenderId: "SENDER_ID",
-            appId: "APP_ID"
+            apiKey: "AIzaSyBXOBu6fmbco27_ugn9pFg2XQ-TaIeNRpY",
+            authDomain: "apknixy-bc9ee.firebaseapp.com",
+            projectId: "apknixy-bc9ee",
+            storageBucket: "apknixy-bc9ee.firebasestorage.app",
+            messagingSenderId: "99276264960",
+            appId: "1:99276264960:web:a4f28913305288544e2ae5"
         };
 
-        // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.firestore();
         let currentUser = null;
 
-        // ---------------------------------------------------------
-        // 2. AUTHENTICATION LOGIC
-        // ---------------------------------------------------------
-        auth.onAuthStateChanged((user) => {
+        // --- 2. AUTHENTICATION LOGIC ---
+        auth.onAuthStateChanged(user => {
             if (user) {
                 currentUser = user;
-                document.getElementById('login-screen').classList.add('hidden');
-                document.getElementById('dashboard').classList.remove('hidden');
-                document.getElementById('username').innerText = user.displayName;
-                
-                // Load Balance and Bank Details
-                loadUserData(user.uid);
+                showSection('dashboard');
+                loadData();
             } else {
-                document.getElementById('login-screen').classList.remove('hidden');
-                document.getElementById('dashboard').classList.add('hidden');
+                showSection('login');
             }
         });
 
         function googleLogin() {
-            const provider = new firebase.auth.GoogleAuthProvider();
-            auth.signInWithPopup(provider).catch(error => {
-                console.error(error);
-                alert("Login Failed: " + error.message);
-            });
+            auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).catch(err => showToast(err.message));
         }
-
         function logout() {
             auth.signOut();
+            toggleDrawer();
         }
 
-        // ---------------------------------------------------------
-        // 3. DATABASE (Load/Save Data)
-        // ---------------------------------------------------------
-        function loadUserData(uid) {
-            db.collection("users").doc(uid).onSnapshot((doc) => {
-                if (doc.exists) {
-                    const data = doc.data();
-                    document.getElementById('balance').innerText = data.balance ? data.balance.toFixed(2) : "0.00";
-                    if(data.bankName) document.getElementById('bankName').value = data.bankName;
-                    if(data.bankUpi) document.getElementById('bankUpi').value = data.bankUpi;
-                    if(data.bankIfsc) document.getElementById('bankIfsc').value = data.bankIfsc;
-                } else {
-                    // Create new user doc
-                    db.collection("users").doc(uid).set({
-                        name: currentUser.displayName,
-                        email: currentUser.email,
-                        balance: 0,
-                        joined: new Date()
-                    });
+        // --- 3. UI & NAVIGATION ---
+        function toggleDrawer() {
+            document.getElementById('drawer').classList.toggle('open');
+            const overlay = document.getElementById('overlay');
+            overlay.style.display = (overlay.style.display === 'block') ? 'none' : 'block';
+        }
+
+        function showSection(id) {
+            ['login', 'dashboard', 'bank', 'withdraw'].forEach(s => {
+                document.getElementById(s + '-view').classList.add('hidden');
+            });
+            document.getElementById(id + '-view').classList.remove('hidden');
+            
+            // Close menu if open
+            document.getElementById('drawer').classList.remove('open');
+            document.getElementById('overlay').style.display = 'none';
+        }
+
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.innerText = msg;
+            t.style.display = 'block';
+            setTimeout(() => t.style.display = 'none', 3000);
+        }
+
+        // --- 4. DATA HANDLING ---
+        function loadData() {
+            db.collection('users').doc(currentUser.uid).onSnapshot(doc => {
+                if(doc.exists) {
+                    const d = doc.data();
+                    document.getElementById('userBalance').innerText = (d.balance || 0).toFixed(2);
+                    if(d.upi) {
+                        document.getElementById('upiId').value = d.upi;
+                        document.getElementById('dispUpi').innerText = d.upi;
+                    } else {
+                        document.getElementById('dispUpi').innerText = "Not Set";
+                    }
+                    if(d.name) document.getElementById('holderName').value = d.name;
                 }
             });
         }
 
-        function saveBankDetails() {
-            if(!currentUser) return;
-            const name = document.getElementById('bankName').value;
-            const upi = document.getElementById('bankUpi').value;
-            const ifsc = document.getElementById('bankIfsc').value;
+        function saveDetails() {
+            const upi = document.getElementById('upiId').value.trim();
+            const name = document.getElementById('holderName').value.trim();
+            if(!upi || !name) return showToast("Please fill all fields");
 
-            db.collection("users").doc(currentUser.uid).update({
-                bankName: name,
-                bankUpi: upi,
-                bankIfsc: ifsc
-            }).then(() => {
-                alert("Bank Details Saved Successfully!");
-            }).catch(err => alert("Error: " + err.message));
-        }
+            const userRef = db.collection('users').doc(currentUser.uid);
+            userRef.get().then(doc => {
+                const today = new Date().toDateString();
+                let count = 0;
+                if(doc.exists && doc.data().lastUpdateDate === today) count = doc.data().updateCount || 0;
+                
+                if(count >= 2) return showToast("Daily update limit reached (2/2)");
 
-        // ---------------------------------------------------------
-        // 4. SMART LINK LOGIC (Sabse Zaruri Part)
-        // ---------------------------------------------------------
-        function openSmartLink() {
-            if(!currentUser) return;
-
-            // Base URL provided by you
-            const baseUrl = "https://www.overthegridge.help/?sl=6045944-36e1f";
-            
-            // IMPORTANT: Hum User ki ID 'pub_click_id' me bhej rahe hain
-            // Taki Mobidea track kar sake ki kis user ne install kiya
-            const finalLink = `${baseUrl}&pub_click_id=${currentUser.uid}`;
-
-            // Open Link in new tab
-            window.open(finalLink, '_blank');
-            
-            // Note for User
-            alert("App download page khul raha hai. Install karke open karein tabhi paise add honge.");
+                userRef.set({
+                    upi: upi, name: name, email: currentUser.email,
+                    lastUpdateDate: today, updateCount: count + 1
+                }, { merge: true }).then(() => {
+                    showToast("Details Saved Successfully!"); showSection('dashboard');
+                });
+            });
         }
 
         function requestWithdraw() {
-            const bal = parseFloat(document.getElementById('balance').innerText);
-            if(bal >= 100) {
-                alert("Withdrawal request sent to admin!");
-                // Yahan withdrawal logic aayega (Firestore me new collection banana padega 'withdrawals')
-            } else {
-                alert("You need minimum ₹100 to withdraw.");
+            const amount = parseFloat(document.getElementById('wAmount').value);
+            const current = parseFloat(document.getElementById('userBalance').innerText);
+            
+            if(!amount || amount < 100) return showToast("Minimum withdrawal is ₹100");
+            if(amount > current) return showToast("Insufficient Wallet Balance");
+            
+            // Confirm Dialog
+            if(confirm(`Withdraw ₹${amount}?`)) {
+                db.collection('withdrawals').add({
+                    userId: currentUser.uid,
+                    email: currentUser.email,
+                    amount: amount,
+                    payout: amount, // No cut for CPI tasks usually, or change to amount * 0.90
+                    status: 'pending',
+                    date: new Date()
+                }).then(() => {
+                    showToast("Withdrawal Request Sent!");
+                    showSection('dashboard');
+                });
             }
         }
 
-        // ---------------------------------------------------------
-        // 5. UI TABS
-        // ---------------------------------------------------------
-        function showTab(tabName) {
-            if(tabName === 'earn') {
-                document.getElementById('tab-earn').classList.remove('hidden');
-                document.getElementById('tab-wallet').classList.add('hidden');
-                document.getElementById('btn-earn').classList.replace('text-gray-400', 'text-white');
-                document.getElementById('btn-earn').classList.replace('bg-gray-800', 'bg-blue-600');
-                document.getElementById('btn-wallet').classList.replace('text-white', 'text-gray-400');
-                document.getElementById('btn-wallet').classList.replace('bg-blue-600', 'bg-gray-800');
-            } else {
-                document.getElementById('tab-earn').classList.add('hidden');
-                document.getElementById('tab-wallet').classList.remove('hidden');
-                document.getElementById('btn-wallet').classList.replace('text-gray-400', 'text-white');
-                document.getElementById('btn-wallet').classList.replace('bg-gray-800', 'bg-blue-600');
-                document.getElementById('btn-earn').classList.replace('text-white', 'text-gray-400');
-                document.getElementById('btn-earn').classList.replace('bg-blue-600', 'bg-gray-800');
-            }
+        // --- 5. MOBIDEA SMART LINK INTEGRATION ---
+        function openSmartLink() {
+            if(!currentUser) return showToast("Please Login First");
+            
+            // 1. Base Link
+            const baseLink = "https://www.overthegridge.help/?sl=6045944-36e1f";
+            
+            // 2. Attach User ID for Tracking
+            // Hum 'pub_click_id' mein user ka UID bhej rahe hain
+            const finalLink = `${baseLink}&pub_click_id=${currentUser.uid}&site=ApknixyWeb`;
+            
+            // 3. Open in New Tab
+            window.open(finalLink, '_blank');
+            
+            // 4. Alert User
+            setTimeout(() => {
+                alert("App Install karne ke baad 30 sec open rakhein. Balance verification mein 24 ghante lagenge.");
+            }, 1000);
         }
+
     </script>
 </body>
 </html>
