@@ -3,56 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Apknixy Rewards</title>
+    <title>Apknixy - Install & Earn</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        /* PROFESSIONAL APP UI */
-        body { font-family: 'Poppins', sans-serif; margin: 0; padding: 0; background: #f4f7fa; color: #333; -webkit-tap-highlight-color: transparent; }
+        /* --- PROFESSIONAL CSS --- */
+        body { font-family: 'Poppins', sans-serif; margin: 0; padding: 0; background: #f4f7f6; color: #333; -webkit-tap-highlight-color: transparent; }
         
         /* HEADER */
-        .header { background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); color: white; padding: 18px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .header { background: #00C853; color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
         .logo { font-size: 22px; font-weight: 700; letter-spacing: 0.5px; }
         .menu-btn { font-size: 26px; cursor: pointer; }
 
         /* DRAWER MENU */
-        .drawer { position: fixed; top: 0; right: -280px; width: 260px; height: 100%; background: white; z-index: 1000; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); padding: 25px; box-shadow: -5px 0 25px rgba(0,0,0,0.15); }
+        .drawer { position: fixed; top: 0; right: -280px; width: 260px; height: 100%; background: white; z-index: 1000; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); padding: 25px; box-shadow: -5px 0 20px rgba(0,0,0,0.15); }
         .drawer.open { right: 0; }
-        .drawer-item { padding: 15px 0; border-bottom: 1px solid #f0f0f0; font-weight: 600; color: #444; cursor: pointer; display: flex; align-items: center; gap: 12px; font-size: 15px; }
-        .close-drawer { text-align: right; color: #ff4757; font-weight: bold; margin-bottom: 30px; cursor: pointer; font-size: 14px; text-transform: uppercase; }
-        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 900; display: none; backdrop-filter: blur(2px); }
+        .drawer-item { padding: 15px 0; border-bottom: 1px solid #f0f0f0; font-weight: 600; color: #444; cursor: pointer; display: flex; align-items: center; gap: 15px; }
+        .close-drawer { text-align: right; color: #e53935; font-weight: bold; margin-bottom: 30px; cursor: pointer; font-size: 14px; }
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 900; display: none; backdrop-filter: blur(2px); }
 
         /* CONTAINER */
-        .container { padding: 20px; max-width: 480px; margin: 0 auto; }
+        .container { padding: 20px; max-width: 480px; margin: 0 auto; min-height: 80vh; }
         .hidden { display: none !important; }
 
         /* LOGIN SCREEN */
-        .login-wrap { text-align: center; margin-top: 25vh; }
-        .login-card { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
-        .g-btn { background: white; border: 1px solid #e1e1e1; padding: 14px 25px; border-radius: 50px; font-weight: 600; color: #555; display: inline-flex; align-items: center; gap: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); cursor: pointer; transition: 0.2s; width: 100%; justify-content: center; }
-        .g-btn:active { transform: scale(0.98); background: #f9f9f9; }
+        .login-wrap { text-align: center; margin-top: 35vh; }
+        .g-btn { background: white; border: 1px solid #e0e0e0; padding: 14px 30px; border-radius: 50px; font-weight: 600; color: #555; display: inline-flex; align-items: center; gap: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); cursor: pointer; transition: 0.2s; }
+        .g-btn:active { transform: scale(0.98); }
 
-        /* DASHBOARD */
-        .wallet-card { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; padding: 30px; border-radius: 24px; text-align: center; box-shadow: 0 10px 25px rgba(56, 239, 125, 0.4); margin-bottom: 25px; position: relative; overflow: hidden; }
-        .wallet-label { font-size: 14px; opacity: 0.95; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 600; }
-        .wallet-amount { font-size: 52px; font-weight: 700; margin: 10px 0; text-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        
-        .main-btn { background: linear-gradient(to right, #FF512F 0%, #DD2476 51%, #FF512F 100%); background-size: 200% auto; color: white; border: none; width: 100%; padding: 20px; border-radius: 18px; font-size: 18px; font-weight: 700; cursor: pointer; box-shadow: 0 10px 20px rgba(221, 36, 118, 0.3); display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.5s; }
-        .main-btn:active { transform: scale(0.97); }
+        /* DASHBOARD CARD */
+        .wallet-card { background: linear-gradient(135deg, #00C853 0%, #009624 100%); color: white; padding: 30px; border-radius: 25px; text-align: center; box-shadow: 0 15px 30px rgba(0, 200, 83, 0.3); margin-bottom: 30px; position: relative; overflow: hidden; }
+        .wallet-card::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: rgba(255,255,255,0.1); transform: rotate(45deg); pointer-events: none; }
+        .wallet-label { font-size: 14px; opacity: 0.9; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
+        .wallet-amount { font-size: 52px; font-weight: 700; margin: 10px 0; text-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .wallet-sub { font-size: 12px; background: rgba(255,255,255,0.2); padding: 5px 10px; border-radius: 20px; display: inline-block; }
 
-        .notice-box { background: white; border-radius: 16px; padding: 20px; margin-top: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: center; border: 1px solid #eee; }
-        .step-title { font-weight: bold; color: #1e3c72; margin-bottom: 10px; display: block; }
-        .step-text { font-size: 13px; color: #666; line-height: 1.6; }
+        /* TASK BUTTON */
+        .main-btn { background: #2962FF; color: white; border: none; width: 100%; padding: 20px; border-radius: 18px; font-size: 18px; font-weight: bold; cursor: pointer; box-shadow: 0 8px 20px rgba(41, 98, 255, 0.3); display: flex; align-items: center; justify-content: center; gap: 12px; transition: transform 0.1s; position: relative; overflow: hidden; }
+        .main-btn::after { content: 'HIGH PAYING'; position: absolute; top: 0; right: 0; background: #FFD600; color: #333; font-size: 10px; padding: 3px 8px; border-bottom-left-radius: 10px; font-weight: bold; }
+        .main-btn:active { transform: scale(0.98); }
+
+        .notice-box { margin-top: 25px; background: white; padding: 20px; border-radius: 15px; border-left: 5px solid #FFD600; box-shadow: 0 2px 10px rgba(0,0,0,0.03); }
+        .notice-text { font-size: 13px; color: #666; line-height: 1.6; }
 
         /* FORMS */
         .form-box { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
-        .inp-label { font-size: 13px; font-weight: 600; color: #777; margin-bottom: 8px; display: block; margin-left: 5px; }
-        .inp-field { width: 100%; padding: 15px; margin-bottom: 20px; border: 2px solid #f0f0f0; border-radius: 12px; box-sizing: border-box; font-size: 16px; background: #fafafa; transition: 0.3s; font-family: 'Poppins', sans-serif; }
-        .inp-field:focus { border-color: #2a5298; background: white; outline: none; }
+        .form-title { font-size: 18px; font-weight: 700; margin-bottom: 20px; color: #333; }
+        .inp-field { width: 100%; padding: 15px; margin-bottom: 15px; border: 2px solid #f0f0f0; border-radius: 12px; box-sizing: border-box; font-size: 16px; transition: 0.3s; font-family: 'Poppins', sans-serif; }
+        .inp-field:focus { border-color: #00C853; outline: none; background: #fafafa; }
         
-        .action-btn { background: #2a5298; color: white; width: 100%; padding: 16px; border: none; border-radius: 12px; font-weight: 700; font-size: 16px; cursor: pointer; box-shadow: 0 4px 12px rgba(42, 82, 152, 0.3); }
+        .action-btn { background: #333; color: white; width: 100%; padding: 15px; border: none; border-radius: 12px; font-weight: bold; font-size: 16px; cursor: pointer; margin-top: 10px; }
         .cancel-btn { background: transparent; color: #888; width: 100%; padding: 12px; border: none; margin-top: 10px; cursor: pointer; font-weight: 600; }
-
-        .notification { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #333; color: white; padding: 12px 24px; border-radius: 50px; font-size: 14px; z-index: 2000; display: none; box-shadow: 0 5px 15px rgba(0,0,0,0.2); width: 80%; text-align: center; }
     </style>
 </head>
 <body>
@@ -60,95 +60,86 @@
     <div class="header">
         <div class="logo">Apknixy</div>
         <div class="menu-btn" onclick="toggleDrawer()">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
         </div>
     </div>
 
     <div class="overlay" id="overlay" onclick="toggleDrawer()"></div>
     <div class="drawer" id="drawer">
-        <div class="close-drawer" onclick="toggleDrawer()">Close Menu ✕</div>
-        <div class="drawer-item" onclick="showSection('bank')">🏦 Bank Details</div>
-        <div class="drawer-item" onclick="showSection('withdraw')">💸 Withdraw Money</div>
-        <div class="drawer-item" style="color:#ff4757; margin-top:30px;" onclick="logout()">🚪 Secure Logout</div>
+        <div class="close-drawer" onclick="toggleDrawer()">CLOSE ✕</div>
+        <div class="drawer-item" onclick="showSection('bank')">
+            <span>🏦</span> Bank Details
+        </div>
+        <div class="drawer-item" onclick="showSection('withdraw')">
+            <span>💸</span> Withdraw Money
+        </div>
+        <div class="drawer-item" style="color:#e53935; margin-top:auto;" onclick="logout()">
+            <span>🚪</span> Logout
+        </div>
     </div>
 
     <div class="container">
 
         <div id="login-view" class="login-wrap">
-            <div class="login-card">
-                <h2 style="color:#1e3c72; margin-bottom:10px;">Welcome Back</h2>
-                <p style="color:#888; margin-bottom:30px; font-size:14px;">Sign in to start earning from Apps.</p>
-                <button class="g-btn" onclick="googleLogin()">
-                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="22">
-                    Continue with Google
-                </button>
-            </div>
+            <h2 style="margin-bottom:10px;">Welcome to Apknixy</h2>
+            <p style="color:#888; margin-bottom:40px; font-size:14px;">Install apps & earn real money daily.</p>
+            <button class="g-btn" onclick="googleLogin()">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="22">
+                Continue with Google
+            </button>
         </div>
 
         <div id="dashboard-view" class="hidden">
             <div class="wallet-card">
-                <div class="wallet-label">Your Wallet</div>
+                <div class="wallet-label">Current Balance</div>
                 <div class="wallet-amount">₹<span id="userBalance">0.00</span></div>
-                <div style="font-size: 12px; opacity: 0.85; background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 20px; display: inline-block;">Daily Payouts</div>
+                <div class="wallet-sub">Min Withdraw: ₹100</div>
             </div>
 
             <button class="main-btn" onclick="openSmartLink()">
-                🚀 INSTALL APPS & EARN
+                <span>📲</span> INSTALL APPS & EARN
             </button>
 
             <div class="notice-box">
-                <span class="step-title">⚡ How it works:</span>
-                <p class="step-text">
-                    1. Click button & Install the App.<br>
-                    2. Open the App for 30 seconds.<br>
-                    3. <b>Wait 24 Hours:</b> We verify manually.<br>
-                    4. Money is added to wallet after verification.
-                </p>
+                <div class="form-title" style="font-size:15px; margin-bottom:10px;">⚠️ How to Earn:</div>
+                <div class="notice-text">
+                    1. Click button above.<br>
+                    2. Install the App from Play Store.<br>
+                    3. Open the App for 30 seconds.<br>
+                    4. <b>Wait for Verification:</b> Balance will be added automatically within 24 hours after verification.
+                </div>
             </div>
         </div>
 
         <div id="bank-view" class="hidden">
-            <h3 style="color:#1e3c72; margin-bottom:20px;">Payment Profile</h3>
             <div class="form-box">
-                <p style="font-size:12px; color:#ff9800; background:#fff3e0; padding:10px; border-radius:8px; margin-bottom:20px;">⚠️ Security: You can update details only 2 times per day.</p>
-                
-                <label class="inp-label">UPI ID</label>
-                <input type="text" id="upiId" class="inp-field" placeholder="e.g. 98765xxxxx@ybl">
-                
-                <label class="inp-label">Account Holder Name</label>
-                <input type="text" id="holderName" class="inp-field" placeholder="Name as per Bank">
-                
-                <button class="action-btn" onclick="saveDetails()">Save Information</button>
-                <button class="cancel-btn" onclick="showSection('dashboard')">Go Back</button>
+                <div class="form-title">Payment Settings</div>
+                <p style="font-size:12px; color:#FF9800; margin-bottom:15px;">Limit: 2 updates per day.</p>
+                <input type="text" id="upiId" class="inp-field" placeholder="Enter UPI ID (e.g. user@oksbi)">
+                <input type="text" id="holderName" class="inp-field" placeholder="Account Holder Name">
+                <button class="action-btn" onclick="saveDetails()">Save Details</button>
+                <button class="cancel-btn" onclick="showSection('dashboard')">Cancel</button>
             </div>
         </div>
 
         <div id="withdraw-view" class="hidden">
-            <h3 style="color:#1e3c72; margin-bottom:20px;">Withdraw Funds</h3>
             <div class="form-box">
-                <div style="text-align:center; margin-bottom:20px;">
-                    <p style="color:#666; font-size:14px;">Sending Payment to:</p>
-                    <p style="font-weight:bold; font-size:18px; color:#1e3c72;" id="dispUpi">Update in Bank Settings</p>
-                </div>
-
-                <label class="inp-label">Amount (₹)</label>
-                <input type="number" id="wAmount" class="inp-field" placeholder="Min Withdraw: ₹100">
-                
-                <button class="action-btn" style="background:#11998e" onclick="requestWithdraw()">Submit Request</button>
+                <div class="form-title">Withdraw Money</div>
+                <p style="color:#666; font-size:14px; margin-bottom:20px;">Paying to: <b><span id="dispUpi" style="color:#00C853;">Not Set</span></b></p>
+                <input type="number" id="wAmount" class="inp-field" placeholder="Enter Amount (Min ₹100)">
+                <button class="action-btn" style="background:#00C853" onclick="requestWithdraw()">Submit Request</button>
                 <button class="cancel-btn" onclick="showSection('dashboard')">Cancel</button>
             </div>
         </div>
 
     </div>
 
-    <div id="toast" class="notification"></div>
-
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 
     <script>
-        // --- 1. FIREBASE CONFIGURATION (Apni purani config yahan dalein) ---
+        // --- 1. FIREBASE CONFIGURATION (Apni Config Yahan Dalein) ---
         const firebaseConfig = {
             apiKey: "AIzaSyBXOBu6fmbco27_ugn9pFg2XQ-TaIeNRpY",
             authDomain: "apknixy-bc9ee.firebaseapp.com",
@@ -175,14 +166,14 @@
         });
 
         function googleLogin() {
-            auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).catch(err => showToast(err.message));
+            auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).catch(alert);
         }
         function logout() {
             auth.signOut();
             toggleDrawer();
         }
 
-        // --- 3. UI & NAVIGATION ---
+        // --- 3. NAVIGATION LOGIC ---
         function toggleDrawer() {
             document.getElementById('drawer').classList.toggle('open');
             const overlay = document.getElementById('overlay');
@@ -194,20 +185,30 @@
                 document.getElementById(s + '-view').classList.add('hidden');
             });
             document.getElementById(id + '-view').classList.remove('hidden');
-            
-            // Close menu if open
+            // Close drawer
             document.getElementById('drawer').classList.remove('open');
             document.getElementById('overlay').style.display = 'none';
         }
 
-        function showToast(msg) {
-            const t = document.getElementById('toast');
-            t.innerText = msg;
-            t.style.display = 'block';
-            setTimeout(() => t.style.display = 'none', 3000);
+        // --- 4. SMART LINK LOGIC (VERY IMPORTANT) ---
+        function openSmartLink() {
+            if(!currentUser) {
+                alert("Please Login First!");
+                return;
+            }
+
+            // AAPKA SMART LINK
+            const baseUrl = "https://www.overthegridge.help/?sl=6045944-36e1f";
+            
+            // Hum User ki UID ko 'pub_click_id' mein bhej rahe hain
+            // Taki Mobidea Report mein UID show ho
+            const finalUrl = `${baseUrl}&pub_click_id=${currentUser.uid}`;
+            
+            // New Tab mein open karein (CPI links ke liye best)
+            window.open(finalUrl, '_blank');
         }
 
-        // --- 4. DATA HANDLING ---
+        // --- 5. DATA HANDLING ---
         function loadData() {
             db.collection('users').doc(currentUser.uid).onSnapshot(doc => {
                 if(doc.exists) {
@@ -216,8 +217,6 @@
                     if(d.upi) {
                         document.getElementById('upiId').value = d.upi;
                         document.getElementById('dispUpi').innerText = d.upi;
-                    } else {
-                        document.getElementById('dispUpi').innerText = "Not Set";
                     }
                     if(d.name) document.getElementById('holderName').value = d.name;
                 }
@@ -225,9 +224,9 @@
         }
 
         function saveDetails() {
-            const upi = document.getElementById('upiId').value.trim();
-            const name = document.getElementById('holderName').value.trim();
-            if(!upi || !name) return showToast("Please fill all fields");
+            const upi = document.getElementById('upiId').value;
+            const name = document.getElementById('holderName').value;
+            if(!upi || !name) return alert("Please fill all details");
 
             const userRef = db.collection('users').doc(currentUser.uid);
             userRef.get().then(doc => {
@@ -235,13 +234,14 @@
                 let count = 0;
                 if(doc.exists && doc.data().lastUpdateDate === today) count = doc.data().updateCount || 0;
                 
-                if(count >= 2) return showToast("Daily update limit reached (2/2)");
+                if(count >= 2) return alert("Daily limit reached (2 updates max).");
 
                 userRef.set({
                     upi: upi, name: name, email: currentUser.email,
                     lastUpdateDate: today, updateCount: count + 1
                 }, { merge: true }).then(() => {
-                    showToast("Details Saved Successfully!"); showSection('dashboard');
+                    alert("Details Saved Successfully!"); 
+                    showSection('dashboard');
                 });
             });
         }
@@ -250,45 +250,23 @@
             const amount = parseFloat(document.getElementById('wAmount').value);
             const current = parseFloat(document.getElementById('userBalance').innerText);
             
-            if(!amount || amount < 100) return showToast("Minimum withdrawal is ₹100");
-            if(amount > current) return showToast("Insufficient Wallet Balance");
+            if(amount < 100) return alert("Minimum withdraw is ₹100");
+            if(amount > current) return alert("Insufficient Balance");
             
-            // Confirm Dialog
-            if(confirm(`Withdraw ₹${amount}?`)) {
+            if(confirm(`Confirm withdrawal of ₹${amount}? 10% Platform fee applies.`)) {
                 db.collection('withdrawals').add({
                     userId: currentUser.uid,
                     email: currentUser.email,
                     amount: amount,
-                    payout: amount, // No cut for CPI tasks usually, or change to amount * 0.90
+                    payout: amount * 0.90,
                     status: 'pending',
                     date: new Date()
                 }).then(() => {
-                    showToast("Withdrawal Request Sent!");
+                    alert("Request Sent! Payment will be processed shortly.");
                     showSection('dashboard');
                 });
             }
         }
-
-        // --- 5. MOBIDEA SMART LINK INTEGRATION ---
-        function openSmartLink() {
-            if(!currentUser) return showToast("Please Login First");
-            
-            // 1. Base Link
-            const baseLink = "https://www.overthegridge.help/?sl=6045944-36e1f";
-            
-            // 2. Attach User ID for Tracking
-            // Hum 'pub_click_id' mein user ka UID bhej rahe hain
-            const finalLink = `${baseLink}&pub_click_id=${currentUser.uid}&site=ApknixyWeb`;
-            
-            // 3. Open in New Tab
-            window.open(finalLink, '_blank');
-            
-            // 4. Alert User
-            setTimeout(() => {
-                alert("App Install karne ke baad 30 sec open rakhein. Balance verification mein 24 ghante lagenge.");
-            }, 1000);
-        }
-
     </script>
 </body>
 </html>
