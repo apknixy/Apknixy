@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Poppins', sans-serif; background: #f0f2f5; margin: 0; padding: 0; color: #333; }
-        .container { max-width: 480px; margin: 0 auto; padding: 20px; }
+        .container { max-width: 480px; margin: 0 auto; padding: 20px; padding-bottom: 80px; }
         .hidden { display: none !important; }
         
         /* HEADER */
@@ -26,9 +26,9 @@
         .btn-success { background: #00C853; color: white; }
         .btn-danger { background: white; color: #d32f2f; border: 1px solid #d32f2f; }
         
-        /* SCROLLABLE AD BOX (New Feature) */
+        /* SCROLLABLE AD BOX */
         .scroll-ad-container {
-            height: 500px; /* Fixed height */
+            height: 600px; /* Fixed height */
             overflow-y: scroll; /* Vertical Scroll */
             background: #fff;
             border: 2px solid #ddd;
@@ -38,28 +38,23 @@
             text-align: center;
         }
         
-        /* VIDEO PLAYERS GRID */
-        .vast-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 20px; }
-        .vast-player { 
-            background: #000; 
-            height: 150px; /* Thoda bada size */
-            border-radius: 8px; 
-            overflow: hidden; 
-            border: 1px solid #ccc;
-            position: relative;
+        /* VIDEO PLAYER CONTAINER */
+        .video-wrapper {
+            margin-bottom: 20px;
+            border: 1px solid #eee;
+            padding: 5px;
+            border-radius: 8px;
+            background: #fafafa;
         }
-        .vast-player iframe { width: 100%; height: 100%; border: none; }
-        
+
         /* BANNER SPACING */
         .banner-slot { margin: 15px 0; border-bottom: 1px dashed #eee; padding-bottom: 10px; }
 
-        /* HISTORY */
+        /* HISTORY & MENU CSS SAME AS BEFORE */
         .history-item { display: flex; justify-content: space-between; padding: 12px; border-bottom: 1px solid #eee; font-size: 14px; }
         .status-pending { color: orange; font-weight: bold; }
         .status-paid { color: green; font-weight: bold; }
         .status-rejected { color: red; font-weight: bold; }
-        
-        /* MENU */
         .drawer { position: fixed; top: 0; right: -100%; width: 250px; height: 100%; background: white; z-index: 1000; transition: 0.3s; padding: 20px; box-shadow: -5px 0 15px rgba(0,0,0,0.1); }
         .drawer.open { right: 0; }
     </style>
@@ -92,10 +87,10 @@
                 <button class="btn btn-danger" onclick="openSmartLink()">📲 INSTALL & EARN</button>
             </div>
 
-            <h3>⚡ Ad Zone (Scroll Down)</h3>
+            <h3>⚡ Watch Video Ads</h3>
             <div class="scroll-ad-container">
                 
-                <p style="font-size:12px; color:gray;">Sponsored Ads</p>
+                <p style="font-size:12px; color:gray;">Sponsored Content</p>
 
                 <div class="banner-slot">
                     <script>
@@ -109,11 +104,11 @@
                     </script>
                 </div>
 
-                <div class="vast-grid">
-                    <div class="vast-player"><iframe id="frame1"></iframe></div>
-                    <div class="vast-player"><iframe id="frame2"></iframe></div>
-                    <div class="vast-player"><iframe id="frame3"></iframe></div>
-                    <div class="vast-player"><iframe id="frame4"></iframe></div>
+                <div class="video-wrapper">
+                    <p style="font-size:10px; text-align:left; color:#999; margin:0 0 5px 5px;">Ad Player 1</p>
+                    <div id="adplayer_container_1">
+                         <script src="https://static.adplayer.pro/player/demo.js"></script>
+                    </div>
                 </div>
 
                 <div class="banner-slot">
@@ -128,16 +123,9 @@
                     </script>
                 </div>
 
-                <div class="banner-slot">
-                     <script>
-                    (function(odwi){
-                    var d = document, s = d.createElement('script'), l = d.scripts[d.scripts.length - 1];
-                    s.settings = odwi || {};
-                    s.src = "\/\/swiftvolume.com\/byXaVCsWd.GZlE0iYuWbcT\/YeVmm9suUZVUglKk\/P\/TIYz3uM\/zLgSxqMCTEYxt-NGjdcOz\/OpDcENxvNewl";
-                    s.async = true; s.referrerPolicy = 'no-referrer-when-downgrade';
-                    l.parentNode.insertBefore(s, l);
-                    })({})
-                    </script>
+                 <div class="video-wrapper">
+                    <p style="font-size:10px; text-align:left; color:#999; margin:0 0 5px 5px;">Ad Player 2</p>
+                    <script src="https://static.adplayer.pro/player/demo.js"></script>
                 </div>
 
                  <div class="banner-slot">
@@ -207,13 +195,12 @@
         const db = firebase.firestore();
         let currentUser = null;
 
-        // AUTH & INIT
+        // AUTH
         auth.onAuthStateChanged(user => {
             if (user) {
                 currentUser = user;
                 showSection('dashboard');
                 loadData();
-                runAds(); // Start all ads loop
             } else {
                 showSection('login');
             }
@@ -228,13 +215,12 @@
             document.getElementById('dashboard-view').classList.add('hidden');
             document.getElementById('withdraw-view').classList.add('hidden');
             document.getElementById('drawer').classList.remove('open');
-            
             if(id === 'history') id = 'withdraw'; 
             document.getElementById(id + '-view').classList.remove('hidden');
-
             if(id === 'withdraw') loadHistory();
         }
 
+        // DATA
         function loadData() {
             db.collection('users').doc(currentUser.uid).onSnapshot(doc => {
                 if(doc.exists) {
@@ -302,31 +288,6 @@
                     let colorClass = d.status === 'pending' ? "status-pending" : (d.status === 'paid' ? "status-paid" : "status-rejected");
                     list.innerHTML += `<div class="history-item"><div><b>₹${d.amount}</b><br><small>${new Date(d.date.seconds*1000).toLocaleDateString()}</small></div><div class="${colorClass}">${d.status.toUpperCase()}</div></div>`;
                 });
-            });
-        }
-
-        // --- NEW ADS LOGIC (CONTINUOUS LOOP) ---
-        function runAds() {
-            const frames = ['frame1', 'frame2', 'frame3', 'frame4'];
-            const vastUrl = "https://physicaldad.com/ddm.F/zjdPGpNhvqZ/GBUa/IezmO9hulZiUxldk/PVTwYt3JMNz/gJxDMMjmM/taNsjzcVzdOpDlEJyTNGCmZ-saaHWb1FpZdkDh0kxW";
-
-            // Function to reload specific frame
-            function reloadFrame(frameId) {
-                const iframe = document.getElementById(frameId);
-                // Adding timestamp to force reload (Cache busting)
-                iframe.src = vastUrl + "&t=" + new Date().getTime(); 
-            }
-
-            // Start all 4 players immediately
-            frames.forEach((id, index) => {
-                reloadFrame(id);
-                
-                // Set Interval for loop (Har 20-25 seconds mein reload hoga)
-                // Random time taki sab ek saath na refresh ho (Natural lage)
-                const randomTime = 20000 + (Math.random() * 5000); 
-                setInterval(() => {
-                    reloadFrame(id);
-                }, randomTime);
             });
         }
     </script>
