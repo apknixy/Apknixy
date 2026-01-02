@@ -28,8 +28,8 @@
         
         /* SCROLLABLE AD BOX */
         .scroll-ad-container {
-            height: 600px; /* Fixed height */
-            overflow-y: scroll; /* Vertical Scroll */
+            height: 600px;
+            overflow-y: scroll;
             background: #fff;
             border: 2px solid #ddd;
             border-radius: 10px;
@@ -38,7 +38,7 @@
             text-align: center;
         }
         
-        /* VIDEO PLAYER CONTAINER */
+        /* VIDEO PLAYER WRAPPER */
         .video-wrapper {
             margin-bottom: 20px;
             border: 1px solid #eee;
@@ -47,10 +47,10 @@
             background: #fafafa;
         }
 
-        /* BANNER SPACING */
+        /* BANNER SLOT */
         .banner-slot { margin: 15px 0; border-bottom: 1px dashed #eee; padding-bottom: 10px; }
 
-        /* HISTORY & MENU CSS SAME AS BEFORE */
+        /* HISTORY & MENU */
         .history-item { display: flex; justify-content: space-between; padding: 12px; border-bottom: 1px solid #eee; font-size: 14px; }
         .status-pending { color: orange; font-weight: bold; }
         .status-paid { color: green; font-weight: bold; }
@@ -105,8 +105,8 @@
                 </div>
 
                 <div class="video-wrapper">
-                    <p style="font-size:10px; text-align:left; color:#999; margin:0 0 5px 5px;">Ad Player 1</p>
-                    <div id="adplayer_container_1">
+                    <p style="font-size:10px; text-align:left; color:#999; margin:0 0 5px 5px;">Ad Player</p>
+                    <div id="adplayer_container">
                          <script src="https://static.adplayer.pro/player/demo.js"></script>
                     </div>
                 </div>
@@ -121,11 +121,6 @@
                     l.parentNode.insertBefore(s, l);
                     })({})
                     </script>
-                </div>
-
-                 <div class="video-wrapper">
-                    <p style="font-size:10px; text-align:left; color:#999; margin:0 0 5px 5px;">Ad Player 2</p>
-                    <script src="https://static.adplayer.pro/player/demo.js"></script>
                 </div>
 
                  <div class="banner-slot">
@@ -246,9 +241,20 @@
             }, { merge: true }).then(() => alert("UPI Saved"));
         }
 
+        // --- NEW SMART LINK LOGIC ---
         function openSmartLink() {
-            const baseUrl = "https://www.overthegridge.help/?sl=6045944-36e1f";
-            const finalUrl = `${baseUrl}&pub_click_id=${currentUser.uid}`;
+            if(!currentUser) {
+                alert("Login First");
+                return;
+            }
+            // User Link
+            const rawUrl = "https://www.lisabergtrain.support/click?offer_id=32308&pub_id=267394&pub_click_id=ADD_CLICK_ID_HERE&site=PASS_SITE_HERE";
+            
+            // Replacing Data
+            const finalUrl = rawUrl
+                .replace("ADD_CLICK_ID_HERE", currentUser.uid) // UID set karna
+                .replace("PASS_SITE_HERE", "apknixy"); // Site name set karna
+                
             window.open(finalUrl, '_blank');
         }
 
