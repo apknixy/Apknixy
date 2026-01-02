@@ -4,140 +4,220 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="referrer" content="no-referrer-when-downgrade" />
-    <title>Apknixy Task</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <title>Apknixy Task Online</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #0f172a; --accent: #22c55e; --bg: #f8fafc; --white: #ffffff; --text: #334155; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); margin: 0; padding: 0; color: var(--text); }
+        :root {
+            --primary-dark: #0f172a; /* Deep Navy */
+            --primary-green: #22c55e; /* Money Green */
+            --bg-light: #f8fafc;
+            --text-dark: #334155;
+            --text-muted: #64748b;
+            --white: #ffffff;
+        }
+        body { font-family: 'Inter', sans-serif; background: var(--bg-light); margin: 0; padding: 0; color: var(--text-dark); -webkit-tap-highlight-color: transparent; }
         .hidden { display: none !important; }
-        
-        /* HEADER */
-        .navbar { background: var(--white); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 1px 3px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 50; }
-        
-        /* CSS LOGO */
-        .brand-logo { font-size: 20px; font-weight: 800; color: var(--primary); letter-spacing: -0.5px; text-transform: uppercase; }
-        .brand-logo span { color: var(--accent); }
-        
-        /* HAMBURGER MENU ICON (CSS ONLY) */
-        .menu-icon { width: 24px; height: 18px; position: relative; cursor: pointer; }
-        .menu-icon span { display: block; position: absolute; height: 2px; width: 100%; background: var(--primary); border-radius: 2px; transition: .25s ease-in-out; }
-        .menu-icon span:nth-child(1) { top: 0; }
-        .menu-icon span:nth-child(2) { top: 8px; }
-        .menu-icon span:nth-child(3) { top: 16px; }
+        button { -webkit-tap-highlight-color: transparent; outline: none; }
 
-        /* DRAWER */
-        .sidebar { position: fixed; top: 0; right: -280px; width: 260px; height: 100%; background: var(--white); z-index: 100; transition: 0.3s; padding: 30px; box-shadow: -5px 0 20px rgba(0,0,0,0.05); }
+        /* --- PROFESSIONAL HEADER & LOGO --- */
+        .navbar { background: var(--white); padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 50; border-bottom: 1px solid #e2e8f0; }
+        
+        /* CSS ONLY LOGO (No Emojis) */
+        .brand-logo { font-size: 22px; font-weight: 900; color: var(--primary-dark); letter-spacing: -0.5px; }
+        .brand-logo span { color: var(--primary-green); }
+
+        /* CSS HAMBURGER MENU */
+        .menu-trigger { width: 30px; height: 20px; position: relative; cursor: pointer; }
+        .menu-trigger span { display: block; position: absolute; height: 3px; width: 100%; background: var(--primary-dark); border-radius: 9px; transition: .25s ease-in-out; }
+        .menu-trigger span:nth-child(1) { top: 0px; }
+        .menu-trigger span:nth-child(2) { top: 8px; width: 70%; }
+        .menu-trigger span:nth-child(3) { top: 16px; }
+
+        /* --- DRAWER MENU --- */
+        .sidebar { position: fixed; top: 0; right: -300px; width: 280px; height: 100%; background: var(--white); z-index: 100; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); padding: 30px; box-shadow: -10px 0 30px rgba(0,0,0,0.1); display: flex; flex-direction: column; }
         .sidebar.active { right: 0; }
-        .nav-link { display: block; padding: 12px 0; font-weight: 600; color: var(--text); border-bottom: 1px solid #f1f5f9; cursor: pointer; }
-        .nav-link:hover { color: var(--accent); }
-        .close-btn { text-align: right; font-weight: 800; cursor: pointer; margin-bottom: 30px; color: #ef4444; }
+        .menu-header { display: flex; justify-content: flex-end; margin-bottom: 40px; }
+        .close-icon { width: 24px; height: 24px; position: relative; cursor: pointer; }
+        .close-icon span { position: absolute; top: 50%; left: 50%; width: 100%; height: 3px; background: var(--text-dark); border-radius: 5px; transition: 0.3s; }
+        .close-icon span:nth-child(1) { transform: translate(-50%, -50%) rotate(45deg); }
+        .close-icon span:nth-child(2) { transform: translate(-50%, -50%) rotate(-45deg); }
+        
+        .nav-item { padding: 15px 0; font-weight: 600; font-size: 16px; color: var(--text-dark); border-bottom: 1px solid #f1f5f9; cursor: pointer; transition: 0.2s; }
+        .nav-item:hover { color: var(--primary-green); padding-left: 10px; }
+        .logout-btn { margin-top: auto; color: #ef4444; border: none; font-weight: 700; }
 
-        /* CONTAINER */
-        .main-container { max-width: 500px; margin: 0 auto; padding: 20px; }
+        /* --- LAYOUT --- */
+        .main-wrapper { max-width: 480px; margin: 0 auto; padding: 25px 20px; padding-bottom: 100px; }
 
         /* BALANCE CARD */
-        .stats-card { background: var(--primary); color: var(--white); padding: 30px; border-radius: 16px; text-align: center; margin-bottom: 25px; box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.3); }
-        .stats-label { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; opacity: 0.8; }
-        .stats-value { font-size: 42px; font-weight: 800; margin: 10px 0; }
+        .stats-card { background: var(--primary-dark); color: var(--white); padding: 30px; border-radius: 20px; text-align: center; box-shadow: 0 20px 25px -5px rgba(15, 23, 42, 0.3); margin-bottom: 30px; }
+        .stats-title { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.2px; opacity: 0.8; }
+        .stats-amount { font-size: 48px; font-weight: 900; margin: 15px 0; line-height: 1; }
 
-        /* BUTTONS */
-        .btn { display: block; width: 100%; padding: 16px; border: none; border-radius: 12px; font-weight: 600; font-size: 15px; cursor: pointer; transition: 0.2s; margin-bottom: 12px; }
-        .btn-accent { background: var(--accent); color: var(--white); box-shadow: 0 4px 6px -1px rgba(34, 197, 94, 0.4); }
-        .btn-dark { background: #334155; color: var(--white); }
-        .btn-outline { background: transparent; border: 2px solid #cbd5e1; color: #64748b; }
-
-        /* AD GRID SYSTEM (20 Banners) */
-        .ad-grid { display: flex; flex-direction: column; gap: 15px; margin-top: 30px; }
-        .ad-slot { background: #e2e8f0; min-height: 250px; display: flex; align-items: center; justify-content: center; border-radius: 8px; overflow: hidden; position: relative; }
-        .ad-slot::before { content: 'ADVERTISEMENT'; position: absolute; font-size: 10px; color: #94a3b8; font-weight: bold; letter-spacing: 1px; }
+        /* ACTIONS & BUTTONS */
+        .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 30px; }
+        .btn { width: 100%; padding: 18px; border: none; border-radius: 15px; font-weight: 700; font-size: 15px; cursor: pointer; transition: transform 0.1s; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .btn:active { transform: scale(0.98); }
+        .btn-tw { background: #3b82f6; color: white; box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.4); grid-column: span 2; }
+        .btn-smart { background: var(--primary-green); color: white; box-shadow: 0 10px 15px -3px rgba(34, 197, 94, 0.4); grid-column: span 2; }
         
-        /* FORMS */
-        .input-group { margin-bottom: 15px; }
-        .form-input { width: 100%; padding: 14px; border: 2px solid #e2e8f0; border-radius: 10px; font-family: inherit; box-sizing: border-box; }
-        .form-input:focus { border-color: var(--primary); outline: none; }
+        /* --- NEW VERTICAL SCROLL AD BOX --- */
+        .ad-scroll-container {
+            height: 650px; /* Fixed height for scrolling area */
+            overflow-y: auto; /* Enables vertical scrolling */
+            background: #e2e8f0;
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            border: 2px solid #cbd5e1;
+            /* Custom Scrollbar styling for webkit */
+            scrollbar-width: thin;
+            scrollbar-color: #cbd5e1 transparent;
+        }
+        .ad-scroll-container::-webkit-scrollbar { width: 6px; }
+        .ad-scroll-container::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 20px; }
+        
+        .ad-wrapper {
+            background: var(--white);
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 20px; /* Space between ads */
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            min-height: 250px; /* Ensure space for 300x250 banner */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-        /* HISTORY LIST */
-        .list-item { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid #f1f5f9; font-size: 14px; }
-        .tag { padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 800; text-transform: uppercase; }
-        .tag-pending { background: #fff7ed; color: #c2410c; }
-        .tag-paid { background: #f0fdf4; color: #15803d; }
+        /* FORMS & HISTORY */
+        .form-label { display: block; font-weight: 600; margin-bottom: 10px; color: var(--text-dark); }
+        .form-input { width: 100%; padding: 16px; border: 2px solid #e2e8f0; border-radius: 12px; font-family: inherit; font-size: 16px; box-sizing: border-box; transition: 0.3s; }
+        .form-input:focus { border-color: var(--primary-dark); outline: none; }
+        .btn-submit { background: var(--primary-dark); color: white; margin-top: 20px; }
+        .btn-cancel { background: transparent; color: var(--text-muted); border: 2px solid #e2e8f0; margin-top: 10px; }
+
+        .history-list { margin-top: 30px; }
+        .hist-item { display: flex; justify-content: space-between; align-items: center; padding: 18px 0; border-bottom: 1px solid #f1f5f9; }
+        .hist-status { padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 800; text-transform: uppercase; }
+        .st-pending { background: #fff7ed; color: #c2410c; }
+        .st-paid { background: #f0fdf4; color: #15803d; }
+
+        /* TIMEWALL MODAL */
+        #tw-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--white); z-index: 200; display: none; flex-direction: column; }
+        .tw-toolbar { background: var(--primary-dark); color: var(--white); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; font-weight: 700; }
+        .tw-close-btn { background: rgba(255,255,255,0.2); padding: 8px 15px; border-radius: 8px; cursor: pointer; font-size: 14px; }
     </style>
 </head>
 <body>
 
     <nav class="navbar">
         <div class="brand-logo">Apknixy<span>Task</span></div>
-        <div class="menu-icon" onclick="toggleMenu()">
+        <div class="menu-trigger" onclick="toggleMenu()">
             <span></span><span></span><span></span>
         </div>
     </nav>
 
     <div class="sidebar" id="sidebar">
-        <div class="close-btn" onclick="toggleMenu()">CLOSE</div>
-        <div class="nav-link" onclick="switchTab('withdraw')">Withdraw Funds</div>
-        <div class="nav-link" onclick="switchTab('history')">Transaction History</div>
-        <div class="nav-link" onclick="logout()" style="color:#ef4444; border:none;">Sign Out</div>
+        <div class="menu-header">
+            <div class="close-icon" onclick="toggleMenu()"><span></span><span></span></div>
+        </div>
+        <div class="nav-item" onclick="navigate('withdraw')">Withdraw Funds</div>
+        <div class="nav-item" onclick="navigate('history')">Transaction History</div>
+        <div class="nav-item logout-btn" onclick="logout()">Sign Out</div>
     </div>
 
-    <div class="main-container">
-
-        <div id="auth-screen" style="text-align:center; margin-top:100px;">
-            <h2 style="color:var(--primary);">Welcome Back</h2>
-            <p style="color:#64748b; margin-bottom:30px;">Sign in to access your dashboard.</p>
-            <button class="btn btn-dark" onclick="googleSignIn()">Continue with Google</button>
+    <div class="main-wrapper">
+        
+        <div id="auth-view" style="text-align:center; margin-top:120px;">
+            <h2 style="font-size:28px; font-weight:900; color:var(--primary-dark); margin-bottom:10px;">Welcome</h2>
+            <p style="color:var(--text-muted); margin-bottom:40px;">Sign in to start earning.</p>
+            <button class="btn" style="background:var(--white); color:var(--text-dark); border:2px solid #e2e8f0;" onclick="googleLogin()">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="24">
+                Continue with Google
+            </button>
         </div>
 
-        <div id="dash-screen" class="hidden">
+        <div id="dash-view" class="hidden">
+            
             <div class="stats-card">
-                <div class="stats-label">Total Earnings</div>
-                <div class="stats-value">₹<span id="bal">0.00</span></div>
+                <div class="stats-title">Available Balance</div>
+                <div class="stats-amount">₹<span id="bal-disp">0.00</span></div>
             </div>
 
-            <button class="btn btn-accent" onclick="openTimeWall()">START TASKS (TimeWall)</button>
-            <button class="btn btn-dark" onclick="openSmartLink()">INSTALL APPS</button>
+            <div class="action-grid">
+                <button class="btn btn-tw" onclick="openTimeWall()">
+                    START TIMEWALL TASKS
+                </button>
+                <button class="btn btn-smart" onclick="openSmartLink()">
+                    INSTALL PREMIUM APPS
+                </button>
+            </div>
 
-            <div class="ad-grid">
-                <div class="ad-slot"><script>(function(odwi){var d=document,s=d.createElement('script'),l=d.scripts[d.scripts.length-1];s.settings=odwi||{};s.src="\/\/swiftvolume.com\/byXaVCsWd.GZlE0iYuWbcT\/YeVmm9suUZVUglKk\/P\/TIYz3uM\/zLgSxqMCTEYxt-NGjdcOz\/OpDcENxvNewl";s.async=true;s.referrerPolicy='no-referrer-when-downgrade';l.parentNode.insertBefore(s,l);})({})</script></div>
-                <div class="ad-slot"><script>(function(odwi){var d=document,s=d.createElement('script'),l=d.scripts[d.scripts.length-1];s.settings=odwi||{};s.src="\/\/swiftvolume.com\/byXaVCsWd.GZlE0iYuWbcT\/YeVmm9suUZVUglKk\/P\/TIYz3uM\/zLgSxqMCTEYxt-NGjdcOz\/OpDcENxvNewl";s.async=true;s.referrerPolicy='no-referrer-when-downgrade';l.parentNode.insertBefore(s,l);})({})</script></div>
-                <div class="ad-slot"><script>(function(odwi){var d=document,s=d.createElement('script'),l=d.scripts[d.scripts.length-1];s.settings=odwi||{};s.src="\/\/swiftvolume.com\/byXaVCsWd.GZlE0iYuWbcT\/YeVmm9suUZVUglKk\/P\/TIYz3uM\/zLgSxqMCTEYxt-NGjdcOz\/OpDcENxvNewl";s.async=true;s.referrerPolicy='no-referrer-when-downgrade';l.parentNode.insertBefore(s,l);})({})</script></div>
-                <div class="ad-slot"><script>(function(odwi){var d=document,s=d.createElement('script'),l=d.scripts[d.scripts.length-1];s.settings=odwi||{};s.src="\/\/swiftvolume.com\/byXaVCsWd.GZlE0iYuWbcT\/YeVmm9suUZVUglKk\/P\/TIYz3uM\/zLgSxqMCTEYxt-NGjdcOz\/OpDcENxvNewl";s.async=true;s.referrerPolicy='no-referrer-when-downgrade';l.parentNode.insertBefore(s,l);})({})</script></div>
-                <div class="ad-slot"><script>(function(odwi){var d=document,s=d.createElement('script'),l=d.scripts[d.scripts.length-1];s.settings=odwi||{};s.src="\/\/swiftvolume.com\/byXaVCsWd.GZlE0iYuWbcT\/YeVmm9suUZVUglKk\/P\/TIYz3uM\/zLgSxqMCTEYxt-NGjdcOz\/OpDcENxvNewl";s.async=true;s.referrerPolicy='no-referrer-when-downgrade';l.parentNode.insertBefore(s,l);})({})</script></div>
+            <div style="margin-bottom: 25px; text-align: center;">
+                 <script>(function(tqr){var d=document,s=d.createElement('script'),l=d.scripts[d.scripts.length-1];s.settings=tqr||{};s.src="\/\/swiftvolume.com\/bjX.VcsXdeGPlr0lY\/Wxcl\/seDmO9CuhZwU\/lukLP\/TYYP3nMJzCgAxLM\/TqIGtUNOjTcszPONDVEwxEMdwd";s.async=true;s.referrerPolicy='no-referrer-when-downgrade';l.parentNode.insertBefore(s,l);})({})</script>
+            </div>
+
+            <h3 style="font-weight:800; color:var(--primary-dark); margin-bottom:15px;">Sponsored Content</h3>
+            <div class="ad-scroll-container">
                 
-                <script>
-                (function(tqr){var d=document,s=d.createElement('script'),l=d.scripts[d.scripts.length-1];s.settings=tqr||{};s.src="\/\/swiftvolume.com\/bjX.VcsXdeGPlr0lY\/Wxcl\/seDmO9CuhZwU\/lukLP\/TYYP3nMJzCgAxLM\/TqIGtUNOjTcszPONDVEwxEMdwd";s.async=true;s.referrerPolicy='no-referrer-when-downgrade';l.parentNode.insertBefore(s,l);})({})
-                </script>
+                <div class="ad-wrapper"><script>(function(odwi){var d=document,s=d.createElement('script'),l=d.scripts[d.scripts.length-1];s.settings=odwi||{};s.src="\/\/swiftvolume.com\/byXaVCsWd.GZlE0iYuWbcT\/YeVmm9suUZVUglKk\/P\/TIYz3uM\/zLgSxqMCTEYxt-NGjdcOz\/OpDcENxvNewl";s.async=true;s.referrerPolicy='no-referrer-when-downgrade';l.parentNode.insertBefore(s,l);})({})</script></div>
+                <div class="ad-wrapper"><script>(function(odwi){var d=document,s=d.createElement('script'),l=d.scripts[d.scripts.length-1];s.settings=odwi||{};s.src="\/\/swiftvolume.com\/byXaVCsWd.GZlE0iYuWbcT\/YeVmm9suUZVUglKk\/P\/TIYz3uM\/zLgSxqMCTEYxt-NGjdcOz\/OpDcENxvNewl";s.async=true;s.referrerPolicy='no-referrer-when-downgrade';l.parentNode.insertBefore(s,l);})({})</script></div>
+                <div class="ad-wrapper"><script>(function(odwi){var d=document,s=d.createElement('script'),l=d.scripts[d.scripts.length-1];s.settings=odwi||{};s.src="\/\/swiftvolume.com\/byXaVCsWd.GZlE0iYuWbcT\/YeVmm9suUZVUglKk\/P\/TIYz3uM\/zLgSxqMCTEYxt-NGjdcOz\/OpDcENxvNewl";s.async=true;s.referrerPolicy='no-referrer-when-downgrade';l.parentNode.insertBefore(s,l);})({})</script></div>
+                <div class="ad-wrapper"><script>(function(odwi){var d=document,s=d.createElement('script'),l=d.scripts[d.scripts.length-1];s.settings=odwi||{};s.src="\/\/swiftvolume.com\/byXaVCsWd.GZlE0iYuWbcT\/YeVmm9suUZVUglKk\/P\/TIYz3uM\/zLgSxqMCTEYxt-NGjdcOz\/OpDcENxvNewl";s.async=true;s.referrerPolicy='no-referrer-when-downgrade';l.parentNode.insertBefore(s,l);})({})</script></div>
+                <div class="ad-wrapper"><script>(function(odwi){var d=document,s=d.createElement('script'),l=d.scripts[d.scripts.length-1];s.settings=odwi||{};s.src="\/\/swiftvolume.com\/byXaVCsWd.GZlE0iYuWbcT\/YeVmm9suUZVUglKk\/P\/TIYz3uM\/zLgSxqMCTEYxt-NGjdcOz\/OpDcENxvNewl";s.async=true;s.referrerPolicy='no-referrer-when-downgrade';l.parentNode.insertBefore(s,l);})({})</script></div>
+                <div class="ad-wrapper"><script>(function(odwi){var d=document,s=d.createElement('script'),l=d.scripts[d.scripts.length-1];s.settings=odwi||{};s.src="\/\/swiftvolume.com\/byXaVCsWd.GZlE0iYuWbcT\/YeVmm9suUZVUglKk\/P\/TIYz3uM\/zLgSxqMCTEYxt-NGjdcOz\/OpDcENxvNewl";s.async=true;s.referrerPolicy='no-referrer-when-downgrade';l.parentNode.insertBefore(s,l);})({})</script></div>
+                <div class="ad-wrapper"><script>(function(odwi){var d=document,s=d.createElement('script'),l=d.scripts[d.scripts.length-1];s.settings=odwi||{};s.src="\/\/swiftvolume.com\/byXaVCsWd.GZlE0iYuWbcT\/YeVmm9suUZVUglKk\/P\/TIYz3uM\/zLgSxqMCTEYxt-NGjdcOz\/OpDcENxvNewl";s.async=true;s.referrerPolicy='no-referrer-when-downgrade';l.parentNode.insertBefore(s,l);})({})</script></div>
+                <div class="ad-wrapper"><script>(function(odwi){var d=document,s=d.createElement('script'),l=d.scripts[d.scripts.length-1];s.settings=odwi||{};s.src="\/\/swiftvolume.com\/byXaVCsWd.GZlE0iYuWbcT\/YeVmm9suUZVUglKk\/P\/TIYz3uM\/zLgSxqMCTEYxt-NGjdcOz\/OpDcENxvNewl";s.async=true;s.referrerPolicy='no-referrer-when-downgrade';l.parentNode.insertBefore(s,l);})({})</script></div>
+                <div class="ad-wrapper"><script>(function(odwi){var d=document,s=d.createElement('script'),l=d.scripts[d.scripts.length-1];s.settings=odwi||{};s.src="\/\/swiftvolume.com\/byXaVCsWd.GZlE0iYuWbcT\/YeVmm9suUZVUglKk\/P\/TIYz3uM\/zLgSxqMCTEYxt-NGjdcOz\/OpDcENxvNewl";s.async=true;s.referrerPolicy='no-referrer-when-downgrade';l.parentNode.insertBefore(s,l);})({})</script></div>
+                <div class="ad-wrapper"><script>(function(odwi){var d=document,s=d.createElement('script'),l=d.scripts[d.scripts.length-1];s.settings=odwi||{};s.src="\/\/swiftvolume.com\/byXaVCsWd.GZlE0iYuWbcT\/YeVmm9suUZVUglKk\/P\/TIYz3uM\/zLgSxqMCTEYxt-NGjdcOz\/OpDcENxvNewl";s.async=true;s.referrerPolicy='no-referrer-when-downgrade';l.parentNode.insertBefore(s,l);})({})</script></div>
+                <div class="ad-wrapper"><script>(function(odwi){var d=document,s=d.createElement('script'),l=d.scripts[d.scripts.length-1];s.settings=odwi||{};s.src="\/\/swiftvolume.com\/byXaVCsWd.GZlE0iYuWbcT\/YeVmm9suUZVUglKk\/P\/TIYz3uM\/zLgSxqMCTEYxt-NGjdcOz\/OpDcENxvNewl";s.async=true;s.referrerPolicy='no-referrer-when-downgrade';l.parentNode.insertBefore(s,l);})({})</script></div>
+                <div class="ad-wrapper"><script>(function(odwi){var d=document,s=d.createElement('script'),l=d.scripts[d.scripts.length-1];s.settings=odwi||{};s.src="\/\/swiftvolume.com\/byXaVCsWd.GZlE0iYuWbcT\/YeVmm9suUZVUglKk\/P\/TIYz3uM\/zLgSxqMCTEYxt-NGjdcOz\/OpDcENxvNewl";s.async=true;s.referrerPolicy='no-referrer-when-downgrade';l.parentNode.insertBefore(s,l);})({})</script></div>
+                <div class="ad-wrapper"><script>(function(odwi){var d=document,s=d.createElement('script'),l=d.scripts[d.scripts.length-1];s.settings=odwi||{};s.src="\/\/swiftvolume.com\/byXaVCsWd.GZlE0iYuWbcT\/YeVmm9suUZVUglKk\/P\/TIYz3uM\/zLgSxqMCTEYxt-NGjdcOz\/OpDcENxvNewl";s.async=true;s.referrerPolicy='no-referrer-when-downgrade';l.parentNode.insertBefore(s,l);})({})</script></div>
+                <div class="ad-wrapper"><script>(function(odwi){var d=document,s=d.createElement('script'),l=d.scripts[d.scripts.length-1];s.settings=odwi||{};s.src="\/\/swiftvolume.com\/byXaVCsWd.GZlE0iYuWbcT\/YeVmm9suUZVUglKk\/P\/TIYz3uM\/zLgSxqMCTEYxt-NGjdcOz\/OpDcENxvNewl";s.async=true;s.referrerPolicy='no-referrer-when-downgrade';l.parentNode.insertBefore(s,l);})({})</script></div>
+                <div class="ad-wrapper"><script>(function(odwi){var d=document,s=d.createElement('script'),l=d.scripts[d.scripts.length-1];s.settings=odwi||{};s.src="\/\/swiftvolume.com\/byXaVCsWd.GZlE0iYuWbcT\/YeVmm9suUZVUglKk\/P\/TIYz3uM\/zLgSxqMCTEYxt-NGjdcOz\/OpDcENxvNewl";s.async=true;s.referrerPolicy='no-referrer-when-downgrade';l.parentNode.insertBefore(s,l);})({})</script></div>
+                <div class="ad-wrapper"><script>(function(odwi){var d=document,s=d.createElement('script'),l=d.scripts[d.scripts.length-1];s.settings=odwi||{};s.src="\/\/swiftvolume.com\/byXaVCsWd.GZlE0iYuWbcT\/YeVmm9suUZVUglKk\/P\/TIYz3uM\/zLgSxqMCTEYxt-NGjdcOz\/OpDcENxvNewl";s.async=true;s.referrerPolicy='no-referrer-when-downgrade';l.parentNode.insertBefore(s,l);})({})</script></div>
+                <div class="ad-wrapper"><script>(function(odwi){var d=document,s=d.createElement('script'),l=d.scripts[d.scripts.length-1];s.settings=odwi||{};s.src="\/\/swiftvolume.com\/byXaVCsWd.GZlE0iYuWbcT\/YeVmm9suUZVUglKk\/P\/TIYz3uM\/zLgSxqMCTEYxt-NGjdcOz\/OpDcENxvNewl";s.async=true;s.referrerPolicy='no-referrer-when-downgrade';l.parentNode.insertBefore(s,l);})({})</script></div>
+                <div class="ad-wrapper"><script>(function(odwi){var d=document,s=d.createElement('script'),l=d.scripts[d.scripts.length-1];s.settings=odwi||{};s.src="\/\/swiftvolume.com\/byXaVCsWd.GZlE0iYuWbcT\/YeVmm9suUZVUglKk\/P\/TIYz3uM\/zLgSxqMCTEYxt-NGjdcOz\/OpDcENxvNewl";s.async=true;s.referrerPolicy='no-referrer-when-downgrade';l.parentNode.insertBefore(s,l);})({})</script></div>
+                <div class="ad-wrapper"><script>(function(odwi){var d=document,s=d.createElement('script'),l=d.scripts[d.scripts.length-1];s.settings=odwi||{};s.src="\/\/swiftvolume.com\/byXaVCsWd.GZlE0iYuWbcT\/YeVmm9suUZVUglKk\/P\/TIYz3uM\/zLgSxqMCTEYxt-NGjdcOz\/OpDcENxvNewl";s.async=true;s.referrerPolicy='no-referrer-when-downgrade';l.parentNode.insertBefore(s,l);})({})</script></div>
+                <div class="ad-wrapper"><script>(function(odwi){var d=document,s=d.createElement('script'),l=d.scripts[d.scripts.length-1];s.settings=odwi||{};s.src="\/\/swiftvolume.com\/byXaVCsWd.GZlE0iYuWbcT\/YeVmm9suUZVUglKk\/P\/TIYz3uM\/zLgSxqMCTEYxt-NGjdcOz\/OpDcENxvNewl";s.async=true;s.referrerPolicy='no-referrer-when-downgrade';l.parentNode.insertBefore(s,l);})({})</script></div>
+            
             </div>
+            </div>
+
+        <div id="withdraw-view" class="hidden">
+            <h2 style="font-weight:900; color:var(--primary-dark);">Withdraw Funds</h2>
+            <div style="background:#f1f5f9; padding:20px; border-radius:12px; font-size:14px; margin-bottom:30px; color:var(--text-dark); line-height:1.6;">
+                Payouts are processed within <b>0-7 business days</b>. Delayed payments will be cleared in the following 7-14 day cycle.
+            </div>
+
+            <p style="font-weight:600;">Target UPI: <b><span id="upi-target" style="color:var(--primary-green);">Not Configured</span></b></p>
+            
+            <div id="upi-setup" style="display:none; margin-bottom:25px;">
+                <input type="text" id="upi-in" class="form-input" placeholder="Enter UPI ID (e.g. name@bank)">
+                <button class="btn btn-submit" onclick="saveUpiConfig()">Save UPI Configuration</button>
+            </div>
+
+            <label class="form-label">Amount (INR)</label>
+            <input type="number" id="amt-in" class="form-input" placeholder="Min. 200">
+            
+            <button class="btn btn-submit" onclick="processPayout()">Confirm Withdraw</button>
+            <button class="btn btn-cancel" onclick="navigate('dash')">Return to Dashboard</button>
         </div>
-
-        <div id="withdraw-screen" class="hidden">
-            <h3 style="color:var(--primary);">Withdraw Funds</h3>
-            <div style="background:#f1f5f9; padding:15px; border-radius:8px; font-size:13px; margin-bottom:20px; color:#475569;">
-                Payouts are processed within 0-7 business days. Delayed payments will be cleared in the subsequent 7-14 day cycle.
-            </div>
-
-            <p>Target UPI: <b><span id="upi-display" style="color:var(--accent);">Not Configured</span></b></p>
-            
-            <input type="text" id="upi-field" class="form-input" placeholder="Enter UPI ID" style="display:none; margin-bottom:10px;">
-            <button class="btn btn-dark" id="upi-save-btn" onclick="updateUpi()" style="display:none;">Save Configuration</button>
-
-            <div class="input-group">
-                <input type="number" id="amt-field" class="form-input" placeholder="Amount (INR) - Min 200">
-            </div>
-            
-            <button class="btn btn-accent" onclick="processWithdraw()">Confirm Withdraw</button>
-            <button class="btn btn-outline" onclick="switchTab('dash')">Cancel</button>
-
-            <div id="hist-list" style="margin-top:30px;"></div>
+        
+        <div id="history-view" class="hidden">
+            <h2 style="font-weight:900; color:var(--primary-dark);">Transaction History</h2>
+            <button class="btn btn-cancel" onclick="navigate('dash')" style="margin-bottom:20px;">Back</button>
+            <div id="hist-list" class="history-list">Loading records...</div>
         </div>
 
     </div>
 
-    <div id="tw-container" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:#fff; z-index:200;">
-        <div style="background:var(--primary); color:#fff; padding:15px; display:flex; justify-content:space-between;">
-            <span>TimeWall</span>
-            <span onclick="closeTimeWall()" style="cursor:pointer;">CLOSE</span>
+    <div id="tw-overlay">
+        <div class="tw-toolbar">
+            <span>TimeWall Tasks</span>
+            <span class="tw-close-btn" onclick="closeTimeWall()">Close & Refresh</span>
         </div>
-        <iframe id="tw-view" style="width:100%; height:100%; border:none;"></iframe>
+        <iframe id="tw-frame" style="width:100%; height:100%; border:none;"></iframe>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
@@ -145,6 +225,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 
     <script>
+        // Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyBXOBu6fmbco27_ugn9pFg2XQ-TaIeNRpY",
             authDomain: "apknixy-bc9ee.firebaseapp.com",
@@ -158,81 +239,82 @@
         const db = firebase.firestore();
         let user = null;
 
+        // Authentication State Listener
         auth.onAuthStateChanged(u => {
-            if (u) { user = u; switchTab('dash'); syncData(); } 
-            else { switchTab('auth'); }
+            if (u) { user = u; navigate('dash'); syncUserData(); } 
+            else { navigate('auth'); }
         });
 
-        function googleSignIn() { auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).catch(console.error); }
+        // Basic Functions
+        function googleLogin() { auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).catch(e => alert(e.message)); }
         function logout() { auth.signOut(); location.reload(); }
         function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); }
 
-        function switchTab(tab) {
-            ['auth', 'dash', 'withdraw'].forEach(t => document.getElementById(t + '-screen').classList.add('hidden'));
+        // Navigation System
+        function navigate(target) {
+            ['auth', 'dash', 'withdraw', 'history'].forEach(v => document.getElementById(v + '-view').classList.add('hidden'));
+            document.getElementById(target + '-view').classList.remove('hidden');
             document.getElementById('sidebar').classList.remove('active');
-            
-            if (tab === 'history') {
-                document.getElementById('withdraw-screen').classList.remove('hidden');
-                fetchHistory();
-            } else {
-                document.getElementById(tab + '-screen').classList.remove('hidden');
-                if (tab === 'withdraw') fetchHistory();
-            }
+            if (target === 'history') fetchHistoryData();
         }
 
-        function syncData() {
+        // Data Synchronization
+        function syncUserData() {
             db.collection('users').doc(user.uid).onSnapshot(doc => {
                 if (doc.exists) {
                     const d = doc.data();
-                    document.getElementById('bal').innerText = (d.balance || 0).toFixed(2);
+                    document.getElementById('bal-disp').innerText = (d.balance || 0).toFixed(2);
                     if (d.upi) {
-                        document.getElementById('upi-display').innerText = d.upi;
-                        document.getElementById('upi-field').style.display = 'none';
-                        document.getElementById('upi-save-btn').style.display = 'none';
+                        document.getElementById('upi-target').innerText = d.upi;
+                        document.getElementById('upi-setup').style.display = 'none';
                     } else {
-                        document.getElementById('upi-field').style.display = 'block';
-                        document.getElementById('upi-save-btn').style.display = 'block';
+                        document.getElementById('upi-target').innerText = "Not Configured";
+                        document.getElementById('upi-setup').style.display = 'block';
                     }
                 }
             });
         }
 
-        function updateUpi() {
-            const val = document.getElementById('upi-field').value;
-            if (val) db.collection('users').doc(user.uid).set({ upi: val, email: user.email }, { merge: true });
+        function saveUpiConfig() {
+            const val = document.getElementById('upi-in').value.trim();
+            if (val.includes('@')) {
+                db.collection('users').doc(user.uid).set({ upi: val, email: user.email }, { merge: true })
+                  .then(() => alert("UPI Saved Successfully"));
+            } else { alert("Invalid UPI format"); }
         }
 
-        function openSmartLink() {
-            // Updated Smart Link Logic with UID
-            window.open(`https://www.lisabergtrain.support/click?offer_id=32308&pub_id=267394&pub_click_id=${user.uid}&site=apknixy`, '_blank');
-        }
-
+        // --- NEW TIMEWALL INTEGRATION (Correct Link) ---
         function openTimeWall() {
-            // Paste your Deployment URL here (Check TimeWall Dashboard)
-            const url = "https://timewall.io/wall/YOUR_PLACEMENT_ID?userid=" + user.uid;
-            
-            // Check if user forgot to add link
-            if(url.includes("YOUR_PLACEMENT")) { alert("Add TimeWall Link in code first"); return; }
-            
-            document.getElementById('tw-view').src = url;
-            document.getElementById('tw-container').style.display = 'block';
+            // Aapka Naya Approved Link + User ID
+            const baseUrl = "https://timewall.io/users/login?oid=daabc8fe249e2334";
+            const finalUrl = `${baseUrl}&uid=${user.uid}`;
+
+            document.getElementById('tw-frame').src = finalUrl;
+            document.getElementById('tw-overlay').style.display = 'flex';
         }
 
         function closeTimeWall() {
-            document.getElementById('tw-container').style.display = 'none';
-            document.getElementById('tw-view').src = "";
+            document.getElementById('tw-overlay').style.display = 'none';
+            document.getElementById('tw-frame').src = "";
+            // Balance auto-syncs via onSnapshot
         }
 
-        function processWithdraw() {
-            const amt = parseFloat(document.getElementById('amt-field').value);
-            const bal = parseFloat(document.getElementById('bal').innerText);
-            const upi = document.getElementById('upi-display').innerText;
+        // Smart Link
+        function openSmartLink() {
+            window.open(`https://www.lisabergtrain.support/click?offer_id=32308&pub_id=267394&pub_click_id=${user.uid}&site=apknixy`, '_blank');
+        }
 
-            if (amt < 200) return alert("Minimum withdrawal: 200 INR");
+        // Withdrawal Logic
+        function processPayout() {
+            const amt = parseFloat(document.getElementById('amt-in').value);
+            const bal = parseFloat(document.getElementById('bal-disp').innerText);
+            const upi = document.getElementById('upi-target').innerText;
+
+            if (amt < 200) return alert("Minimum withdrawal: ₹200");
             if (amt > bal) return alert("Insufficient funds");
-            if (upi === "Not Configured") return alert("Configure UPI first");
+            if (upi === "Not Configured") return alert("Please configure UPI first");
 
-            if (confirm("Confirm withdrawal?")) {
+            if (confirm(`Confirm withdrawal of ₹${amt}?`)) {
                 db.collection('users').doc(user.uid).update({
                     balance: firebase.firestore.FieldValue.increment(-amt)
                 }).then(() => {
@@ -240,28 +322,30 @@
                         userId: user.uid, email: user.email, upi: upi,
                         amount: amt, status: 'pending', date: new Date()
                     });
-                    alert("Request Submitted.");
-                    document.getElementById('amt-field').value = "";
-                    fetchHistory();
-                });
+                    alert("Withdrawal Request Submitted.");
+                    document.getElementById('amt-in').value = "";
+                    navigate('history');
+                }).catch(e => alert("Error: " + e.message));
             }
         }
 
-        function fetchHistory() {
+        // History Fetching
+        function fetchHistoryData() {
             const list = document.getElementById('hist-list');
-            list.innerHTML = "Loading...";
-            db.collection('withdrawals').where("userId", "==", user.uid).orderBy("date", "desc").limit(10).get().then(snap => {
+            list.innerHTML = "Loading records...";
+            db.collection('withdrawals').where("userId", "==", user.uid).orderBy("date", "desc").limit(15).get().then(snap => {
+                if(snap.empty) { list.innerHTML = "No transactions found."; return; }
                 list.innerHTML = "";
                 snap.forEach(doc => {
                     const d = doc.data();
-                    const statusClass = d.status === 'paid' ? 'tag-paid' : (d.status === 'rejected' ? 'tag-rejected' : 'tag-pending');
+                    const statusClass = d.status === 'paid' ? 'st-paid' : (d.status === 'rejected' ? 'st-rejected' : 'st-pending');
                     list.innerHTML += `
-                        <div class="list-item">
+                        <div class="hist-item">
                             <div>
-                                <div style="font-weight:600;">INR ${d.amount}</div>
-                                <div style="font-size:11px; color:#94a3b8;">${new Date(d.date.seconds*1000).toLocaleDateString()}</div>
+                                <div style="font-weight:700; font-size:18px;">₹${d.amount}</div>
+                                <div style="font-size:12px; color:var(--text-muted);">${new Date(d.date.seconds*1000).toLocaleDateString()}</div>
                             </div>
-                            <div class="tag ${statusClass}">${d.status}</div>
+                            <div class="hist-status ${statusClass}">${d.status}</div>
                         </div>
                     `;
                 });
