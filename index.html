@@ -4,173 +4,141 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="referrer" content="no-referrer-when-downgrade" />
-    <title>Apknixy - Watch & Earn</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>Apknixy Task</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Poppins', sans-serif; background: #f0f2f5; margin: 0; padding: 0; color: #333; }
-        .container { max-width: 480px; margin: 0 auto; padding: 20px; padding-bottom: 80px; }
+        :root { --primary: #0f172a; --accent: #22c55e; --bg: #f8fafc; --white: #ffffff; --text: #334155; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); margin: 0; padding: 0; color: var(--text); }
         .hidden { display: none !important; }
         
         /* HEADER */
-        .header { background: #00C853; color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .logo { font-size: 20px; font-weight: bold; }
+        .navbar { background: var(--white); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 1px 3px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 50; }
         
-        /* CARDS */
-        .card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px; }
-        .wallet-bg { background: linear-gradient(135deg, #00C853 0%, #009624 100%); color: white; text-align: center; }
-        .balance { font-size: 48px; font-weight: bold; margin: 10px 0; }
+        /* CSS LOGO */
+        .brand-logo { font-size: 20px; font-weight: 800; color: var(--primary); letter-spacing: -0.5px; text-transform: uppercase; }
+        .brand-logo span { color: var(--accent); }
         
+        /* HAMBURGER MENU ICON (CSS ONLY) */
+        .menu-icon { width: 24px; height: 18px; position: relative; cursor: pointer; }
+        .menu-icon span { display: block; position: absolute; height: 2px; width: 100%; background: var(--primary); border-radius: 2px; transition: .25s ease-in-out; }
+        .menu-icon span:nth-child(1) { top: 0; }
+        .menu-icon span:nth-child(2) { top: 8px; }
+        .menu-icon span:nth-child(3) { top: 16px; }
+
+        /* DRAWER */
+        .sidebar { position: fixed; top: 0; right: -280px; width: 260px; height: 100%; background: var(--white); z-index: 100; transition: 0.3s; padding: 30px; box-shadow: -5px 0 20px rgba(0,0,0,0.05); }
+        .sidebar.active { right: 0; }
+        .nav-link { display: block; padding: 12px 0; font-weight: 600; color: var(--text); border-bottom: 1px solid #f1f5f9; cursor: pointer; }
+        .nav-link:hover { color: var(--accent); }
+        .close-btn { text-align: right; font-weight: 800; cursor: pointer; margin-bottom: 30px; color: #ef4444; }
+
+        /* CONTAINER */
+        .main-container { max-width: 500px; margin: 0 auto; padding: 20px; }
+
+        /* BALANCE CARD */
+        .stats-card { background: var(--primary); color: var(--white); padding: 30px; border-radius: 16px; text-align: center; margin-bottom: 25px; box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.3); }
+        .stats-label { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; opacity: 0.8; }
+        .stats-value { font-size: 42px; font-weight: 800; margin: 10px 0; }
+
         /* BUTTONS */
-        .btn { width: 100%; padding: 15px; border: none; border-radius: 10px; font-weight: bold; font-size: 16px; cursor: pointer; margin-top: 10px; }
-        .btn-primary { background: #2962FF; color: white; }
-        .btn-success { background: #00C853; color: white; }
-        .btn-danger { background: white; color: #d32f2f; border: 1px solid #d32f2f; }
-        
-        /* SCROLLABLE AD BOX */
-        .scroll-ad-container {
-            height: 600px;
-            overflow-y: scroll;
-            background: #fff;
-            border: 2px solid #ddd;
-            border-radius: 10px;
-            padding: 10px;
-            margin-top: 20px;
-            text-align: center;
-        }
-        
-        /* VIDEO PLAYER WRAPPER */
-        .video-wrapper {
-            margin-bottom: 20px;
-            border: 1px solid #eee;
-            padding: 5px;
-            border-radius: 8px;
-            background: #fafafa;
-        }
+        .btn { display: block; width: 100%; padding: 16px; border: none; border-radius: 12px; font-weight: 600; font-size: 15px; cursor: pointer; transition: 0.2s; margin-bottom: 12px; }
+        .btn-accent { background: var(--accent); color: var(--white); box-shadow: 0 4px 6px -1px rgba(34, 197, 94, 0.4); }
+        .btn-dark { background: #334155; color: var(--white); }
+        .btn-outline { background: transparent; border: 2px solid #cbd5e1; color: #64748b; }
 
-        /* BANNER SLOT */
-        .banner-slot { margin: 15px 0; border-bottom: 1px dashed #eee; padding-bottom: 10px; }
+        /* AD GRID SYSTEM (20 Banners) */
+        .ad-grid { display: flex; flex-direction: column; gap: 15px; margin-top: 30px; }
+        .ad-slot { background: #e2e8f0; min-height: 250px; display: flex; align-items: center; justify-content: center; border-radius: 8px; overflow: hidden; position: relative; }
+        .ad-slot::before { content: 'ADVERTISEMENT'; position: absolute; font-size: 10px; color: #94a3b8; font-weight: bold; letter-spacing: 1px; }
+        
+        /* FORMS */
+        .input-group { margin-bottom: 15px; }
+        .form-input { width: 100%; padding: 14px; border: 2px solid #e2e8f0; border-radius: 10px; font-family: inherit; box-sizing: border-box; }
+        .form-input:focus { border-color: var(--primary); outline: none; }
 
-        /* HISTORY & MENU */
-        .history-item { display: flex; justify-content: space-between; padding: 12px; border-bottom: 1px solid #eee; font-size: 14px; }
-        .status-pending { color: orange; font-weight: bold; }
-        .status-paid { color: green; font-weight: bold; }
-        .status-rejected { color: red; font-weight: bold; }
-        .drawer { position: fixed; top: 0; right: -100%; width: 250px; height: 100%; background: white; z-index: 1000; transition: 0.3s; padding: 20px; box-shadow: -5px 0 15px rgba(0,0,0,0.1); }
-        .drawer.open { right: 0; }
+        /* HISTORY LIST */
+        .list-item { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid #f1f5f9; font-size: 14px; }
+        .tag { padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 800; text-transform: uppercase; }
+        .tag-pending { background: #fff7ed; color: #c2410c; }
+        .tag-paid { background: #f0fdf4; color: #15803d; }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <div class="logo">Apknixy</div>
-        <div onclick="toggleDrawer()" style="font-size:24px; cursor:pointer;">☰</div>
+    <nav class="navbar">
+        <div class="brand-logo">Apknixy<span>Task</span></div>
+        <div class="menu-icon" onclick="toggleMenu()">
+            <span></span><span></span><span></span>
+        </div>
+    </nav>
+
+    <div class="sidebar" id="sidebar">
+        <div class="close-btn" onclick="toggleMenu()">CLOSE</div>
+        <div class="nav-link" onclick="switchTab('withdraw')">Withdraw Funds</div>
+        <div class="nav-link" onclick="switchTab('history')">Transaction History</div>
+        <div class="nav-link" onclick="logout()" style="color:#ef4444; border:none;">Sign Out</div>
     </div>
 
-    <div id="drawer" class="drawer">
-        <div onclick="toggleDrawer()" style="text-align:right; color:red; font-weight:bold; cursor:pointer; margin-bottom:20px;">✖ CLOSE</div>
-        <p onclick="showSection('withdraw')">💸 Withdraw Money</p>
-        <p onclick="showSection('history')">📜 Payment History</p>
-        <p onclick="logout()" style="color:red; margin-top:20px;">🚪 Logout</p>
-    </div>
+    <div class="main-container">
 
-    <div class="container">
-        
-        <div id="login-view" style="text-align:center; margin-top:100px;">
-            <h2>Start Earning</h2>
-            <button class="btn btn-primary" onclick="googleLogin()">Login with Google</button>
+        <div id="auth-screen" style="text-align:center; margin-top:100px;">
+            <h2 style="color:var(--primary);">Welcome Back</h2>
+            <p style="color:#64748b; margin-bottom:30px;">Sign in to access your dashboard.</p>
+            <button class="btn btn-dark" onclick="googleSignIn()">Continue with Google</button>
         </div>
 
-        <div id="dashboard-view" class="hidden">
-            <div class="card wallet-bg">
-                <div>Current Balance</div>
-                <div class="balance">₹<span id="userBalance">0</span></div>
-                <button class="btn btn-danger" onclick="openSmartLink()">📲 INSTALL & EARN</button>
+        <div id="dash-screen" class="hidden">
+            <div class="stats-card">
+                <div class="stats-label">Total Earnings</div>
+                <div class="stats-value">₹<span id="bal">0.00</span></div>
             </div>
 
-            <h3>⚡ Watch Video Ads</h3>
-            <div class="scroll-ad-container">
+            <button class="btn btn-accent" onclick="openTimeWall()">START TASKS (TimeWall)</button>
+            <button class="btn btn-dark" onclick="openSmartLink()">INSTALL APPS</button>
+
+            <div class="ad-grid">
+                <div class="ad-slot"><script>(function(odwi){var d=document,s=d.createElement('script'),l=d.scripts[d.scripts.length-1];s.settings=odwi||{};s.src="\/\/swiftvolume.com\/byXaVCsWd.GZlE0iYuWbcT\/YeVmm9suUZVUglKk\/P\/TIYz3uM\/zLgSxqMCTEYxt-NGjdcOz\/OpDcENxvNewl";s.async=true;s.referrerPolicy='no-referrer-when-downgrade';l.parentNode.insertBefore(s,l);})({})</script></div>
+                <div class="ad-slot"><script>(function(odwi){var d=document,s=d.createElement('script'),l=d.scripts[d.scripts.length-1];s.settings=odwi||{};s.src="\/\/swiftvolume.com\/byXaVCsWd.GZlE0iYuWbcT\/YeVmm9suUZVUglKk\/P\/TIYz3uM\/zLgSxqMCTEYxt-NGjdcOz\/OpDcENxvNewl";s.async=true;s.referrerPolicy='no-referrer-when-downgrade';l.parentNode.insertBefore(s,l);})({})</script></div>
+                <div class="ad-slot"><script>(function(odwi){var d=document,s=d.createElement('script'),l=d.scripts[d.scripts.length-1];s.settings=odwi||{};s.src="\/\/swiftvolume.com\/byXaVCsWd.GZlE0iYuWbcT\/YeVmm9suUZVUglKk\/P\/TIYz3uM\/zLgSxqMCTEYxt-NGjdcOz\/OpDcENxvNewl";s.async=true;s.referrerPolicy='no-referrer-when-downgrade';l.parentNode.insertBefore(s,l);})({})</script></div>
+                <div class="ad-slot"><script>(function(odwi){var d=document,s=d.createElement('script'),l=d.scripts[d.scripts.length-1];s.settings=odwi||{};s.src="\/\/swiftvolume.com\/byXaVCsWd.GZlE0iYuWbcT\/YeVmm9suUZVUglKk\/P\/TIYz3uM\/zLgSxqMCTEYxt-NGjdcOz\/OpDcENxvNewl";s.async=true;s.referrerPolicy='no-referrer-when-downgrade';l.parentNode.insertBefore(s,l);})({})</script></div>
+                <div class="ad-slot"><script>(function(odwi){var d=document,s=d.createElement('script'),l=d.scripts[d.scripts.length-1];s.settings=odwi||{};s.src="\/\/swiftvolume.com\/byXaVCsWd.GZlE0iYuWbcT\/YeVmm9suUZVUglKk\/P\/TIYz3uM\/zLgSxqMCTEYxt-NGjdcOz\/OpDcENxvNewl";s.async=true;s.referrerPolicy='no-referrer-when-downgrade';l.parentNode.insertBefore(s,l);})({})</script></div>
                 
-                <p style="font-size:12px; color:gray;">Sponsored Content</p>
-
-                <div class="banner-slot">
-                    <script>
-                    (function(odwi){
-                    var d = document, s = d.createElement('script'), l = d.scripts[d.scripts.length - 1];
-                    s.settings = odwi || {};
-                    s.src = "\/\/swiftvolume.com\/byXaVCsWd.GZlE0iYuWbcT\/YeVmm9suUZVUglKk\/P\/TIYz3uM\/zLgSxqMCTEYxt-NGjdcOz\/OpDcENxvNewl";
-                    s.async = true; s.referrerPolicy = 'no-referrer-when-downgrade';
-                    l.parentNode.insertBefore(s, l);
-                    })({})
-                    </script>
-                </div>
-
-                <div class="video-wrapper">
-                    <p style="font-size:10px; text-align:left; color:#999; margin:0 0 5px 5px;">Ad Player</p>
-                    <div id="adplayer_container">
-                         <script src="https://static.adplayer.pro/player/demo.js"></script>
-                    </div>
-                </div>
-
-                <div class="banner-slot">
-                    <script>
-                    (function(rbtsgm){
-                    var d = document, s = d.createElement('script'), l = d.scripts[d.scripts.length - 1];
-                    s.settings = rbtsgm || {};
-                    s.src = "\/\/swiftvolume.com\/bOXaV.sRdPGZlZ0lY\/Wxcx\/de\/mV9lu\/ZIUKl-kxPDTnYZ3WMgzcguxJMCjjAQtkNwjmcVzAOCDOEZyhM\/QT";
-                    s.async = true; s.referrerPolicy = 'no-referrer-when-downgrade';
-                    l.parentNode.insertBefore(s, l);
-                    })({})
-                    </script>
-                </div>
-
-                 <div class="banner-slot">
-                    <script>
-                    (function(rbtsgm){
-                    var d = document, s = d.createElement('script'), l = d.scripts[d.scripts.length - 1];
-                    s.settings = rbtsgm || {};
-                    s.src = "\/\/swiftvolume.com\/bOXaV.sRdPGZlZ0lY\/Wxcx\/de\/mV9lu\/ZIUKl-kxPDTnYZ3WMgzcguxJMCjjAQtkNwjmcVzAOCDOEZyhM\/QT";
-                    s.async = true; s.referrerPolicy = 'no-referrer-when-downgrade';
-                    l.parentNode.insertBefore(s, l);
-                    })({})
-                    </script>
-                </div>
-
+                <script>
+                (function(tqr){var d=document,s=d.createElement('script'),l=d.scripts[d.scripts.length-1];s.settings=tqr||{};s.src="\/\/swiftvolume.com\/bjX.VcsXdeGPlr0lY\/Wxcl\/seDmO9CuhZwU\/lukLP\/TYYP3nMJzCgAxLM\/TqIGtUNOjTcszPONDVEwxEMdwd";s.async=true;s.referrerPolicy='no-referrer-when-downgrade';l.parentNode.insertBefore(s,l);})({})
+                </script>
             </div>
+        </div>
+
+        <div id="withdraw-screen" class="hidden">
+            <h3 style="color:var(--primary);">Withdraw Funds</h3>
+            <div style="background:#f1f5f9; padding:15px; border-radius:8px; font-size:13px; margin-bottom:20px; color:#475569;">
+                Payouts are processed within 0-7 business days. Delayed payments will be cleared in the subsequent 7-14 day cycle.
             </div>
 
-        <div id="withdraw-view" class="hidden">
-            <div class="card">
-                <h3>Withdraw Money</h3>
-                <div style="background:#fff3cd; color:#856404; padding:10px; border-radius:5px; font-size:12px; margin-bottom:15px;">
-                    Payment Time: <b>0-7 Days</b>.<br>If delayed, it will process in next 7-14 days cycle.
-                </div>
-                
-                <p>Withdraw to: <b><span id="dispUpi" style="color:#00C853">Not Set</span></b></p>
-                <input type="text" id="upiInput" placeholder="Set UPI ID" class="btn" style="background:#f9f9f9; border:1px solid #ddd; display:none;">
-                <button class="btn btn-primary" id="saveUpiBtn" onclick="saveUpi()" style="display:none;">Save UPI</button>
+            <p>Target UPI: <b><span id="upi-display" style="color:var(--accent);">Not Configured</span></b></p>
+            
+            <input type="text" id="upi-field" class="form-input" placeholder="Enter UPI ID" style="display:none; margin-bottom:10px;">
+            <button class="btn btn-dark" id="upi-save-btn" onclick="updateUpi()" style="display:none;">Save Configuration</button>
 
-                <input type="number" id="wAmount" placeholder="Enter Amount (Min ₹200)" class="btn" style="background:#fff; border:1px solid #ccc; text-align:left;">
-                <button class="btn btn-success" onclick="requestWithdraw()">Withdraw Now</button>
-                <button class="btn btn-danger" onclick="showSection('dashboard')">Cancel</button>
+            <div class="input-group">
+                <input type="number" id="amt-field" class="form-input" placeholder="Amount (INR) - Min 200">
             </div>
+            
+            <button class="btn btn-accent" onclick="processWithdraw()">Confirm Withdraw</button>
+            <button class="btn btn-outline" onclick="switchTab('dash')">Cancel</button>
 
-            <h3>📜 Withdrawal History</h3>
-            <div class="card" id="historyList">
-                <p style="text-align:center;">Loading history...</p>
-            </div>
+            <div id="hist-list" style="margin-top:30px;"></div>
         </div>
 
     </div>
 
-    <script>
-    (function(tqr){
-    var d = document, s = d.createElement('script'), l = d.scripts[d.scripts.length - 1];
-    s.settings = tqr || {};
-    s.src = "\/\/swiftvolume.com\/bjX.VcsXdeGPlr0lY\/Wxcl\/seDmO9CuhZwU\/lukLP\/TYYP3nMJzCgAxLM\/TqIGtUNOjTcszPONDVEwxEMdwd";
-    s.async = true; s.referrerPolicy = 'no-referrer-when-downgrade';
-    l.parentNode.insertBefore(s, l);
-    })({})
-    </script>
+    <div id="tw-container" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:#fff; z-index:200;">
+        <div style="background:var(--primary); color:#fff; padding:15px; display:flex; justify-content:space-between;">
+            <span>TimeWall</span>
+            <span onclick="closeTimeWall()" style="cursor:pointer;">CLOSE</span>
+        </div>
+        <iframe id="tw-view" style="width:100%; height:100%; border:none;"></iframe>
+    </div>
 
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
@@ -188,111 +156,114 @@
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.firestore();
-        let currentUser = null;
+        let user = null;
 
-        // AUTH
-        auth.onAuthStateChanged(user => {
-            if (user) {
-                currentUser = user;
-                showSection('dashboard');
-                loadData();
-            } else {
-                showSection('login');
-            }
+        auth.onAuthStateChanged(u => {
+            if (u) { user = u; switchTab('dash'); syncData(); } 
+            else { switchTab('auth'); }
         });
 
-        function googleLogin() { auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).catch(alert); }
+        function googleSignIn() { auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).catch(console.error); }
         function logout() { auth.signOut(); location.reload(); }
-        function toggleDrawer() { document.getElementById('drawer').classList.toggle('open'); }
+        function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); }
 
-        function showSection(id) {
-            document.getElementById('login-view').classList.add('hidden');
-            document.getElementById('dashboard-view').classList.add('hidden');
-            document.getElementById('withdraw-view').classList.add('hidden');
-            document.getElementById('drawer').classList.remove('open');
-            if(id === 'history') id = 'withdraw'; 
-            document.getElementById(id + '-view').classList.remove('hidden');
-            if(id === 'withdraw') loadHistory();
+        function switchTab(tab) {
+            ['auth', 'dash', 'withdraw'].forEach(t => document.getElementById(t + '-screen').classList.add('hidden'));
+            document.getElementById('sidebar').classList.remove('active');
+            
+            if (tab === 'history') {
+                document.getElementById('withdraw-screen').classList.remove('hidden');
+                fetchHistory();
+            } else {
+                document.getElementById(tab + '-screen').classList.remove('hidden');
+                if (tab === 'withdraw') fetchHistory();
+            }
         }
 
-        // DATA
-        function loadData() {
-            db.collection('users').doc(currentUser.uid).onSnapshot(doc => {
-                if(doc.exists) {
+        function syncData() {
+            db.collection('users').doc(user.uid).onSnapshot(doc => {
+                if (doc.exists) {
                     const d = doc.data();
-                    document.getElementById('userBalance').innerText = (d.balance || 0).toFixed(2);
-                    if(d.upi) {
-                        document.getElementById('dispUpi').innerText = d.upi;
-                        document.getElementById('upiInput').style.display = 'none';
-                        document.getElementById('saveUpiBtn').style.display = 'none';
+                    document.getElementById('bal').innerText = (d.balance || 0).toFixed(2);
+                    if (d.upi) {
+                        document.getElementById('upi-display').innerText = d.upi;
+                        document.getElementById('upi-field').style.display = 'none';
+                        document.getElementById('upi-save-btn').style.display = 'none';
                     } else {
-                        document.getElementById('upiInput').style.display = 'block';
-                        document.getElementById('saveUpiBtn').style.display = 'block';
+                        document.getElementById('upi-field').style.display = 'block';
+                        document.getElementById('upi-save-btn').style.display = 'block';
                     }
                 }
             });
         }
 
-        function saveUpi() {
-            const upi = document.getElementById('upiInput').value;
-            if(!upi) return alert("Enter UPI ID");
-            db.collection('users').doc(currentUser.uid).set({ 
-                upi: upi, email: currentUser.email, name: currentUser.displayName 
-            }, { merge: true }).then(() => alert("UPI Saved"));
+        function updateUpi() {
+            const val = document.getElementById('upi-field').value;
+            if (val) db.collection('users').doc(user.uid).set({ upi: val, email: user.email }, { merge: true });
         }
 
-        // --- NEW SMART LINK LOGIC ---
         function openSmartLink() {
-            if(!currentUser) {
-                alert("Login First");
-                return;
-            }
-            // User Link
-            const rawUrl = "https://www.lisabergtrain.support/click?offer_id=32308&pub_id=267394&pub_click_id=ADD_CLICK_ID_HERE&site=PASS_SITE_HERE";
-            
-            // Replacing Data
-            const finalUrl = rawUrl
-                .replace("ADD_CLICK_ID_HERE", currentUser.uid) // UID set karna
-                .replace("PASS_SITE_HERE", "apknixy"); // Site name set karna
-                
-            window.open(finalUrl, '_blank');
+            // Updated Smart Link Logic with UID
+            window.open(`https://www.lisabergtrain.support/click?offer_id=32308&pub_id=267394&pub_click_id=${user.uid}&site=apknixy`, '_blank');
         }
 
-        function requestWithdraw() {
-            const amount = parseFloat(document.getElementById('wAmount').value);
-            const currentBal = parseFloat(document.getElementById('userBalance').innerText);
+        function openTimeWall() {
+            // Paste your Deployment URL here (Check TimeWall Dashboard)
+            const url = "https://timewall.io/wall/YOUR_PLACEMENT_ID?userid=" + user.uid;
             
-            if(amount < 200) return alert("Minimum withdrawal is ₹200");
-            if(amount > currentBal) return alert("Insufficient Balance");
-            const upiText = document.getElementById('dispUpi').innerText;
-            if(upiText === "Not Set") return alert("Please set UPI ID first");
+            // Check if user forgot to add link
+            if(url.includes("YOUR_PLACEMENT")) { alert("Add TimeWall Link in code first"); return; }
+            
+            document.getElementById('tw-view').src = url;
+            document.getElementById('tw-container').style.display = 'block';
+        }
 
-            if(confirm(`Withdraw ₹${amount}?`)) {
-                db.collection('users').doc(currentUser.uid).update({
-                    balance: firebase.firestore.FieldValue.increment(-amount)
+        function closeTimeWall() {
+            document.getElementById('tw-container').style.display = 'none';
+            document.getElementById('tw-view').src = "";
+        }
+
+        function processWithdraw() {
+            const amt = parseFloat(document.getElementById('amt-field').value);
+            const bal = parseFloat(document.getElementById('bal').innerText);
+            const upi = document.getElementById('upi-display').innerText;
+
+            if (amt < 200) return alert("Minimum withdrawal: 200 INR");
+            if (amt > bal) return alert("Insufficient funds");
+            if (upi === "Not Configured") return alert("Configure UPI first");
+
+            if (confirm("Confirm withdrawal?")) {
+                db.collection('users').doc(user.uid).update({
+                    balance: firebase.firestore.FieldValue.increment(-amt)
                 }).then(() => {
                     db.collection('withdrawals').add({
-                        userId: currentUser.uid, email: currentUser.email, name: currentUser.displayName,
-                        upi: upiText, amount: amount, status: 'pending', date: new Date()
-                    }).then(() => {
-                        alert("Request Sent! Check history.");
-                        document.getElementById('wAmount').value = "";
-                        loadHistory();
+                        userId: user.uid, email: user.email, upi: upi,
+                        amount: amt, status: 'pending', date: new Date()
                     });
-                }).catch(err => alert("Error: " + err.message));
+                    alert("Request Submitted.");
+                    document.getElementById('amt-field').value = "";
+                    fetchHistory();
+                });
             }
         }
 
-        function loadHistory() {
-            const list = document.getElementById('historyList');
-            list.innerHTML = "<p>Loading...</p>";
-            db.collection('withdrawals').where("userId", "==", currentUser.uid).orderBy("date", "desc").limit(10).get().then(snap => {
+        function fetchHistory() {
+            const list = document.getElementById('hist-list');
+            list.innerHTML = "Loading...";
+            db.collection('withdrawals').where("userId", "==", user.uid).orderBy("date", "desc").limit(10).get().then(snap => {
                 list.innerHTML = "";
-                if(snap.empty) { list.innerHTML = "<p>No history found.</p>"; return; }
                 snap.forEach(doc => {
                     const d = doc.data();
-                    let colorClass = d.status === 'pending' ? "status-pending" : (d.status === 'paid' ? "status-paid" : "status-rejected");
-                    list.innerHTML += `<div class="history-item"><div><b>₹${d.amount}</b><br><small>${new Date(d.date.seconds*1000).toLocaleDateString()}</small></div><div class="${colorClass}">${d.status.toUpperCase()}</div></div>`;
+                    const statusClass = d.status === 'paid' ? 'tag-paid' : (d.status === 'rejected' ? 'tag-rejected' : 'tag-pending');
+                    list.innerHTML += `
+                        <div class="list-item">
+                            <div>
+                                <div style="font-weight:600;">INR ${d.amount}</div>
+                                <div style="font-size:11px; color:#94a3b8;">${new Date(d.date.seconds*1000).toLocaleDateString()}</div>
+                            </div>
+                            <div class="tag ${statusClass}">${d.status}</div>
+                        </div>
+                    `;
                 });
             });
         }
