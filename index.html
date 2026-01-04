@@ -2,222 +2,86 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="referrer" content="no-referrer-when-downgrade" />
-    <title>Apknixy Task Online</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apknixy Task - Professional Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary-dark: #0f172a; /* Deep Navy */
-            --primary-green: #22c55e; /* Money Green */
-            --bg-light: #f8fafc;
-            --text-dark: #334155;
-            --text-muted: #64748b;
-            --white: #ffffff;
-        }
-        body { font-family: 'Inter', sans-serif; background: var(--bg-light); margin: 0; padding: 0; color: var(--text-dark); -webkit-tap-highlight-color: transparent; }
-        .hidden { display: none !important; }
-        button { -webkit-tap-highlight-color: transparent; outline: none; }
+        :root { --primary: #6C63FF; --dark: #2F2E41; --light: #F4F6F8; --green: #00B894; }
+        body { font-family: 'Poppins', sans-serif; background: var(--light); margin: 0; padding: 20px; color: var(--dark); }
+        .card { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 20px; text-align: center; }
+        .balance-box { background: linear-gradient(135deg, #6C63FF, #4834d4); color: white; padding: 30px; border-radius: 20px; position: relative; overflow: hidden; }
+        .balance-amount { font-size: 48px; font-weight: 700; margin: 10px 0; }
+        .coin-anim { position: absolute; width: 30px; height: 30px; background: gold; border-radius: 50%; opacity: 0; animation: coinFly 1s ease-out; }
+        @keyframes coinFly { 0% { top: 100%; opacity: 1; } 100% { top: 20%; opacity: 0; } }
 
-        /* --- PROFESSIONAL HEADER & LOGO --- */
-        .navbar { background: var(--white); padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 50; border-bottom: 1px solid #e2e8f0; }
+        .btn { width: 100%; padding: 15px; border: none; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-green { background: var(--green); color: white; }
         
-        /* CSS ONLY LOGO (No Emojis) */
-        .brand-logo { font-size: 22px; font-weight: 900; color: var(--primary-dark); letter-spacing: -0.5px; }
-        .brand-logo span { color: var(--primary-green); }
-
-        /* CSS HAMBURGER MENU */
-        .menu-trigger { width: 30px; height: 20px; position: relative; cursor: pointer; }
-        .menu-trigger span { display: block; position: absolute; height: 3px; width: 100%; background: var(--primary-dark); border-radius: 9px; transition: .25s ease-in-out; }
-        .menu-trigger span:nth-child(1) { top: 0px; }
-        .menu-trigger span:nth-child(2) { top: 8px; width: 70%; }
-        .menu-trigger span:nth-child(3) { top: 16px; }
-
-        /* --- DRAWER MENU --- */
-        .sidebar { position: fixed; top: 0; right: -300px; width: 280px; height: 100%; background: var(--white); z-index: 100; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); padding: 30px; box-shadow: -10px 0 30px rgba(0,0,0,0.1); display: flex; flex-direction: column; }
-        .sidebar.active { right: 0; }
-        .menu-header { display: flex; justify-content: flex-end; margin-bottom: 40px; }
-        .close-icon { width: 24px; height: 24px; position: relative; cursor: pointer; }
-        .close-icon span { position: absolute; top: 50%; left: 50%; width: 100%; height: 3px; background: var(--text-dark); border-radius: 5px; transition: 0.3s; }
-        .close-icon span:nth-child(1) { transform: translate(-50%, -50%) rotate(45deg); }
-        .close-icon span:nth-child(2) { transform: translate(-50%, -50%) rotate(-45deg); }
+        .profile-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 100; align-items: center; justify-content: center; }
+        .modal-content { background: white; padding: 30px; border-radius: 15px; width: 85%; max-width: 400px; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
         
-        .nav-item { padding: 15px 0; font-weight: 600; font-size: 16px; color: var(--text-dark); border-bottom: 1px solid #f1f5f9; cursor: pointer; transition: 0.2s; }
-        .nav-item:hover { color: var(--primary-green); padding-left: 10px; }
-        .logout-btn { margin-top: auto; color: #ef4444; border: none; font-weight: 700; }
-
-        /* --- LAYOUT --- */
-        .main-wrapper { max-width: 480px; margin: 0 auto; padding: 25px 20px; padding-bottom: 100px; }
-
-        /* BALANCE CARD */
-        .stats-card { background: var(--primary-dark); color: var(--white); padding: 30px; border-radius: 20px; text-align: center; box-shadow: 0 20px 25px -5px rgba(15, 23, 42, 0.3); margin-bottom: 30px; }
-        .stats-title { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.2px; opacity: 0.8; }
-        .stats-amount { font-size: 48px; font-weight: 900; margin: 15px 0; line-height: 1; }
-
-        /* ACTIONS & BUTTONS */
-        .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 30px; }
-        .btn { width: 100%; padding: 18px; border: none; border-radius: 15px; font-weight: 700; font-size: 15px; cursor: pointer; transition: transform 0.1s; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .btn:active { transform: scale(0.98); }
-        .btn-tw { background: #3b82f6; color: white; box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.4); grid-column: span 2; }
-        .btn-smart { background: var(--primary-green); color: white; box-shadow: 0 10px 15px -3px rgba(34, 197, 94, 0.4); grid-column: span 2; }
-        
-        /* --- NEW VERTICAL SCROLL AD BOX --- */
-        .ad-scroll-container {
-            height: 650px; /* Fixed height for scrolling area */
-            overflow-y: auto; /* Enables vertical scrolling */
-            background: #e2e8f0;
-            border-radius: 16px;
-            padding: 20px;
-            text-align: center;
-            border: 2px solid #cbd5e1;
-            /* Custom Scrollbar styling for webkit */
-            scrollbar-width: thin;
-            scrollbar-color: #cbd5e1 transparent;
-        }
-        .ad-scroll-container::-webkit-scrollbar { width: 6px; }
-        .ad-scroll-container::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 20px; }
-        
-        .ad-wrapper {
-            background: var(--white);
-            padding: 10px;
-            border-radius: 10px;
-            margin-bottom: 20px; /* Space between ads */
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
-            min-height: 250px; /* Ensure space for 300x250 banner */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* FORMS & HISTORY */
-        .form-label { display: block; font-weight: 600; margin-bottom: 10px; color: var(--text-dark); }
-        .form-input { width: 100%; padding: 16px; border: 2px solid #e2e8f0; border-radius: 12px; font-family: inherit; font-size: 16px; box-sizing: border-box; transition: 0.3s; }
-        .form-input:focus { border-color: var(--primary-dark); outline: none; }
-        .btn-submit { background: var(--primary-dark); color: white; margin-top: 20px; }
-        .btn-cancel { background: transparent; color: var(--text-muted); border: 2px solid #e2e8f0; margin-top: 10px; }
-
-        .history-list { margin-top: 30px; }
-        .hist-item { display: flex; justify-content: space-between; align-items: center; padding: 18px 0; border-bottom: 1px solid #f1f5f9; }
-        .hist-status { padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 800; text-transform: uppercase; }
-        .st-pending { background: #fff7ed; color: #c2410c; }
-        .st-paid { background: #f0fdf4; color: #15803d; }
-
-        /* TIMEWALL MODAL */
-        #tw-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--white); z-index: 200; display: none; flex-direction: column; }
-        .tw-toolbar { background: var(--primary-dark); color: var(--white); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; font-weight: 700; }
-        .tw-close-btn { background: rgba(255,255,255,0.2); padding: 8px 15px; border-radius: 8px; cursor: pointer; font-size: 14px; }
+        /* AD SPACES */
+        .ad-banner { margin: 20px 0; text-align: center; overflow: hidden; }
     </style>
 </head>
 <body>
 
-    <nav class="navbar">
-        <div class="brand-logo">Apknixy<span>Task</span></div>
-        <div class="menu-trigger" onclick="toggleMenu()">
-            <span></span><span></span><span></span>
-        </div>
-    </nav>
-
-    <div class="sidebar" id="sidebar">
-        <div class="menu-header">
-            <div class="close-icon" onclick="toggleMenu()"><span></span><span></span></div>
-        </div>
-        <div class="nav-item" onclick="navigate('withdraw')">Withdraw Funds</div>
-        <div class="nav-item" onclick="navigate('history')">Transaction History</div>
-        <div class="nav-item logout-btn" onclick="logout()">Sign Out</div>
+    <div id="login-screen" style="text-align:center; margin-top:100px;">
+        <h1>Welcome to Apknixy</h1>
+        <p>Login to start earning ₹1 per minute</p>
+        <button class="btn btn-primary" onclick="googleLogin()">Login with Google</button>
     </div>
 
-    <div class="main-wrapper">
+    <div id="dashboard" style="display:none;">
         
-        <div id="auth-view" style="text-align:center; margin-top:120px;">
-            <h2 style="font-size:28px; font-weight:900; color:var(--primary-dark); margin-bottom:10px;">Welcome</h2>
-            <p style="color:var(--text-muted); margin-bottom:40px;">Sign in to start earning.</p>
-            <button class="btn" style="background:var(--white); color:var(--text-dark); border:2px solid #e2e8f0;" onclick="googleLogin()">
-                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="24">
-                Continue with Google
-            </button>
+        <div class="card balance-box" id="balCard">
+            <div>Current Balance</div>
+            <div class="balance-amount">₹<span id="userBal">0.00</span></div>
+            <small>Click Start Task to Earn</small>
         </div>
 
-        <div id="dash-view" class="hidden">
-            
-            <div class="stats-card">
-                <div class="stats-title">Available Balance</div>
-                <div class="stats-amount">₹<span id="bal-disp">0.00</span></div>
-            </div>
-
-            <div class="action-grid">
-                <button class="btn btn-tw" onclick="openTimeWall()">
-                    START TIMEWALL TASKS
-                </button>
-                <button class="btn btn-smart" onclick="openSmartLink()">
-                    INSTALL PREMIUM APPS
-                </button>
-            </div>
-
-            <div style="margin-bottom: 25px; text-align: center;">
-                 <script>(function(tqr){var d=document,s=d.createElement('script'),l=d.scripts[d.scripts.length-1];s.settings=tqr||{};s.src="\/\/swiftvolume.com\/bjX.VcsXdeGPlr0lY\/Wxcl\/seDmO9CuhZwU\/lukLP\/TYYP3nMJzCgAxLM\/TqIGtUNOjTcszPONDVEwxEMdwd";s.async=true;s.referrerPolicy='no-referrer-when-downgrade';l.parentNode.insertBefore(s,l);})({})</script>
-            </div>
-
-            <h3 style="font-weight:800; color:var(--primary-dark); margin-bottom:15px;">Sponsored Content</h3>
-            <div class="ad-scroll-container">
-                
-                <div class="ad-wrapper"><script>(function(odwi){var d=document,s=d.createElement('script'),l=d.scripts[d.scripts.length-1];s.settings=odwi||{};s.src="\/\/swiftvolume.com\/byXaVCsWd.GZlE0iYuWbcT\/YeVmm9suUZVUglKk\/P\/TIYz3uM\/zLgSxqMCTEYxt-NGjdcOz\/OpDcENxvNewl";s.async=true;s.referrerPolicy='no-referrer-when-downgrade';l.parentNode.insertBefore(s,l);})({})</script></div>
-                <div class="ad-wrapper"><script>(function(odwi){var d=document,s=d.createElement('script'),l=d.scripts[d.scripts.length-1];s.settings=odwi||{};s.src="\/\/swiftvolume.com\/byXaVCsWd.GZlE0iYuWbcT\/YeVmm9suUZVUglKk\/P\/TIYz3uM\/zLgSxqMCTEYxt-NGjdcOz\/OpDcENxvNewl";s.async=true;s.referrerPolicy='no-referrer-when-downgrade';l.parentNode.insertBefore(s,l);})({})</script></div>
-                <div class="ad-wrapper"><script>(function(odwi){var d=document,s=d.createElement('script'),l=d.scripts[d.scripts.length-1];s.settings=odwi||{};s.src="\/\/swiftvolume.com\/byXaVCsWd.GZlE0iYuWbcT\/YeVmm9suUZVUglKk\/P\/TIYz3uM\/zLgSxqMCTEYxt-NGjdcOz\/OpDcENxvNewl";s.async=true;s.referrerPolicy='no-referrer-when-downgrade';l.parentNode.insertBefore(s,l);})({})</script></div>
-                <div class="ad-wrapper"><script>(function(odwi){var d=document,s=d.createElement('script'),l=d.scripts[d.scripts.length-1];s.settings=odwi||{};s.src="\/\/swiftvolume.com\/byXaVCsWd.GZlE0iYuWbcT\/YeVmm9suUZVUglKk\/P\/TIYz3uM\/zLgSxqMCTEYxt-NGjdcOz\/OpDcENxvNewl";s.async=true;s.referrerPolicy='no-referrer-when-downgrade';l.parentNode.insertBefore(s,l);})({})</script></div>
-                <div class="ad-wrapper"><script>(function(odwi){var d=document,s=d.createElement('script'),l=d.scripts[d.scripts.length-1];s.settings=odwi||{};s.src="\/\/swiftvolume.com\/byXaVCsWd.GZlE0iYuWbcT\/YeVmm9suUZVUglKk\/P\/TIYz3uM\/zLgSxqMCTEYxt-NGjdcOz\/OpDcENxvNewl";s.async=true;s.referrerPolicy='no-referrer-when-downgrade';l.parentNode.insertBefore(s,l);})({})</script></div>
-                <div class="ad-wrapper"><script>(function(odwi){var d=document,s=d.createElement('script'),l=d.scripts[d.scripts.length-1];s.settings=odwi||{};s.src="\/\/swiftvolume.com\/byXaVCsWd.GZlE0iYuWbcT\/YeVmm9suUZVUglKk\/P\/TIYz3uM\/zLgSxqMCTEYxt-NGjdcOz\/OpDcENxvNewl";s.async=true;s.referrerPolicy='no-referrer-when-downgrade';l.parentNode.insertBefore(s,l);})({})</script></div>
-                <div class="ad-wrapper"><script>(function(odwi){var d=document,s=d.createElement('script'),l=d.scripts[d.scripts.length-1];s.settings=odwi||{};s.src="\/\/swiftvolume.com\/byXaVCsWd.GZlE0iYuWbcT\/YeVmm9suUZVUglKk\/P\/TIYz3uM\/zLgSxqMCTEYxt-NGjdcOz\/OpDcENxvNewl";s.async=true;s.referrerPolicy='no-referrer-when-downgrade';l.parentNode.insertBefore(s,l);})({})</script></div>
-                <div class="ad-wrapper"><script>(function(odwi){var d=document,s=d.createElement('script'),l=d.scripts[d.scripts.length-1];s.settings=odwi||{};s.src="\/\/swiftvolume.com\/byXaVCsWd.GZlE0iYuWbcT\/YeVmm9suUZVUglKk\/P\/TIYz3uM\/zLgSxqMCTEYxt-NGjdcOz\/OpDcENxvNewl";s.async=true;s.referrerPolicy='no-referrer-when-downgrade';l.parentNode.insertBefore(s,l);})({})</script></div>
-                <div class="ad-wrapper"><script>(function(odwi){var d=document,s=d.createElement('script'),l=d.scripts[d.scripts.length-1];s.settings=odwi||{};s.src="\/\/swiftvolume.com\/byXaVCsWd.GZlE0iYuWbcT\/YeVmm9suUZVUglKk\/P\/TIYz3uM\/zLgSxqMCTEYxt-NGjdcOz\/OpDcENxvNewl";s.async=true;s.referrerPolicy='no-referrer-when-downgrade';l.parentNode.insertBefore(s,l);})({})</script></div>
-                <div class="ad-wrapper"><script>(function(odwi){var d=document,s=d.createElement('script'),l=d.scripts[d.scripts.length-1];s.settings=odwi||{};s.src="\/\/swiftvolume.com\/byXaVCsWd.GZlE0iYuWbcT\/YeVmm9suUZVUglKk\/P\/TIYz3uM\/zLgSxqMCTEYxt-NGjdcOz\/OpDcENxvNewl";s.async=true;s.referrerPolicy='no-referrer-when-downgrade';l.parentNode.insertBefore(s,l);})({})</script></div>
-                <div class="ad-wrapper"><script>(function(odwi){var d=document,s=d.createElement('script'),l=d.scripts[d.scripts.length-1];s.settings=odwi||{};s.src="\/\/swiftvolume.com\/byXaVCsWd.GZlE0iYuWbcT\/YeVmm9suUZVUglKk\/P\/TIYz3uM\/zLgSxqMCTEYxt-NGjdcOz\/OpDcENxvNewl";s.async=true;s.referrerPolicy='no-referrer-when-downgrade';l.parentNode.insertBefore(s,l);})({})</script></div>
-                <div class="ad-wrapper"><script>(function(odwi){var d=document,s=d.createElement('script'),l=d.scripts[d.scripts.length-1];s.settings=odwi||{};s.src="\/\/swiftvolume.com\/byXaVCsWd.GZlE0iYuWbcT\/YeVmm9suUZVUglKk\/P\/TIYz3uM\/zLgSxqMCTEYxt-NGjdcOz\/OpDcENxvNewl";s.async=true;s.referrerPolicy='no-referrer-when-downgrade';l.parentNode.insertBefore(s,l);})({})</script></div>
-                <div class="ad-wrapper"><script>(function(odwi){var d=document,s=d.createElement('script'),l=d.scripts[d.scripts.length-1];s.settings=odwi||{};s.src="\/\/swiftvolume.com\/byXaVCsWd.GZlE0iYuWbcT\/YeVmm9suUZVUglKk\/P\/TIYz3uM\/zLgSxqMCTEYxt-NGjdcOz\/OpDcENxvNewl";s.async=true;s.referrerPolicy='no-referrer-when-downgrade';l.parentNode.insertBefore(s,l);})({})</script></div>
-                <div class="ad-wrapper"><script>(function(odwi){var d=document,s=d.createElement('script'),l=d.scripts[d.scripts.length-1];s.settings=odwi||{};s.src="\/\/swiftvolume.com\/byXaVCsWd.GZlE0iYuWbcT\/YeVmm9suUZVUglKk\/P\/TIYz3uM\/zLgSxqMCTEYxt-NGjdcOz\/OpDcENxvNewl";s.async=true;s.referrerPolicy='no-referrer-when-downgrade';l.parentNode.insertBefore(s,l);})({})</script></div>
-                <div class="ad-wrapper"><script>(function(odwi){var d=document,s=d.createElement('script'),l=d.scripts[d.scripts.length-1];s.settings=odwi||{};s.src="\/\/swiftvolume.com\/byXaVCsWd.GZlE0iYuWbcT\/YeVmm9suUZVUglKk\/P\/TIYz3uM\/zLgSxqMCTEYxt-NGjdcOz\/OpDcENxvNewl";s.async=true;s.referrerPolicy='no-referrer-when-downgrade';l.parentNode.insertBefore(s,l);})({})</script></div>
-                <div class="ad-wrapper"><script>(function(odwi){var d=document,s=d.createElement('script'),l=d.scripts[d.scripts.length-1];s.settings=odwi||{};s.src="\/\/swiftvolume.com\/byXaVCsWd.GZlE0iYuWbcT\/YeVmm9suUZVUglKk\/P\/TIYz3uM\/zLgSxqMCTEYxt-NGjdcOz\/OpDcENxvNewl";s.async=true;s.referrerPolicy='no-referrer-when-downgrade';l.parentNode.insertBefore(s,l);})({})</script></div>
-                <div class="ad-wrapper"><script>(function(odwi){var d=document,s=d.createElement('script'),l=d.scripts[d.scripts.length-1];s.settings=odwi||{};s.src="\/\/swiftvolume.com\/byXaVCsWd.GZlE0iYuWbcT\/YeVmm9suUZVUglKk\/P\/TIYz3uM\/zLgSxqMCTEYxt-NGjdcOz\/OpDcENxvNewl";s.async=true;s.referrerPolicy='no-referrer-when-downgrade';l.parentNode.insertBefore(s,l);})({})</script></div>
-                <div class="ad-wrapper"><script>(function(odwi){var d=document,s=d.createElement('script'),l=d.scripts[d.scripts.length-1];s.settings=odwi||{};s.src="\/\/swiftvolume.com\/byXaVCsWd.GZlE0iYuWbcT\/YeVmm9suUZVUglKk\/P\/TIYz3uM\/zLgSxqMCTEYxt-NGjdcOz\/OpDcENxvNewl";s.async=true;s.referrerPolicy='no-referrer-when-downgrade';l.parentNode.insertBefore(s,l);})({})</script></div>
-                <div class="ad-wrapper"><script>(function(odwi){var d=document,s=d.createElement('script'),l=d.scripts[d.scripts.length-1];s.settings=odwi||{};s.src="\/\/swiftvolume.com\/byXaVCsWd.GZlE0iYuWbcT\/YeVmm9suUZVUglKk\/P\/TIYz3uM\/zLgSxqMCTEYxt-NGjdcOz\/OpDcENxvNewl";s.async=true;s.referrerPolicy='no-referrer-when-downgrade';l.parentNode.insertBefore(s,l);})({})</script></div>
-                <div class="ad-wrapper"><script>(function(odwi){var d=document,s=d.createElement('script'),l=d.scripts[d.scripts.length-1];s.settings=odwi||{};s.src="\/\/swiftvolume.com\/byXaVCsWd.GZlE0iYuWbcT\/YeVmm9suUZVUglKk\/P\/TIYz3uM\/zLgSxqMCTEYxt-NGjdcOz\/OpDcENxvNewl";s.async=true;s.referrerPolicy='no-referrer-when-downgrade';l.parentNode.insertBefore(s,l);})({})</script></div>
-            
-            </div>
-            </div>
-
-        <div id="withdraw-view" class="hidden">
-            <h2 style="font-weight:900; color:var(--primary-dark);">Withdraw Funds</h2>
-            <div style="background:#f1f5f9; padding:20px; border-radius:12px; font-size:14px; margin-bottom:30px; color:var(--text-dark); line-height:1.6;">
-                Payouts are processed within <b>0-7 business days</b>. Delayed payments will be cleared in the following 7-14 day cycle.
-            </div>
-
-            <p style="font-weight:600;">Target UPI: <b><span id="upi-target" style="color:var(--primary-green);">Not Configured</span></b></p>
-            
-            <div id="upi-setup" style="display:none; margin-bottom:25px;">
-                <input type="text" id="upi-in" class="form-input" placeholder="Enter UPI ID (e.g. name@bank)">
-                <button class="btn btn-submit" onclick="saveUpiConfig()">Save UPI Configuration</button>
-            </div>
-
-            <label class="form-label">Amount (INR)</label>
-            <input type="number" id="amt-in" class="form-input" placeholder="Min. 200">
-            
-            <button class="btn btn-submit" onclick="processPayout()">Confirm Withdraw</button>
-            <button class="btn btn-cancel" onclick="navigate('dash')">Return to Dashboard</button>
+        <div id="profile-warn" class="card" style="border: 2px solid orange; display:none;">
+            <h3 style="color:orange;">⚠️ Profile Incomplete</h3>
+            <p>Please complete your profile to withdraw money.</p>
+            <button class="btn btn-primary" onclick="openProfile()">Complete Profile</button>
         </div>
-        
-        <div id="history-view" class="hidden">
-            <h2 style="font-weight:900; color:var(--primary-dark);">Transaction History</h2>
-            <button class="btn btn-cancel" onclick="navigate('dash')" style="margin-bottom:20px;">Back</button>
-            <div id="hist-list" class="history-list">Loading records...</div>
+
+        <div class="card">
+            <h3>🚀 Daily Tasks</h3>
+            <p>Completed: <span id="dailyCount">0</span>/1000</p>
+            
+            <div id="task-buttons">
+                <button class="btn btn-green" id="startBtn" onclick="startTaskSession()">START TASK 1</button>
+            </div>
+            
+            <div style="margin-top:15px; font-size:12px; color:gray;">
+                <label><input type="checkbox" id="autoMode" checked> Auto Mode (Auto Scroll & Next)</label>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>💸 Withdraw</h3>
+            <input type="number" id="wAmount" placeholder="Amount (Min ₹500)">
+            <button class="btn btn-primary" onclick="requestWithdraw()">Withdraw Money</button>
+        </div>
+
+        <div class="ad-banner">
+            <ins style="width: 728px;height:90px" data-width="728" data-height="90" class="y9ce5119f35" data-domain="//data527.click" data-affquery="/388273335727fcad9412/9ce5119f35/?placementName=Banner"><script src="//data527.click/js/responsive.js" async></script></ins>
         </div>
 
     </div>
 
-    <div id="tw-overlay">
-        <div class="tw-toolbar">
-            <span>TimeWall Tasks</span>
-            <span class="tw-close-btn" onclick="closeTimeWall()">Close & Refresh</span>
+    <div id="profileModal" class="profile-modal">
+        <div class="modal-content">
+            <h3>Complete Profile</h3>
+            <input type="text" id="pName" placeholder="Full Name">
+            <input type="number" id="pAge" placeholder="Age">
+            <input type="date" id="pDob" placeholder="Date of Birth">
+            <input type="text" id="pUpi" placeholder="UPI ID (e.g. 9876543210@ybl)">
+            <button class="btn btn-green" onclick="saveProfile()">Save Details</button>
         </div>
-        <iframe id="tw-frame" style="width:100%; height:100%; border:none;"></iframe>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
@@ -225,7 +89,6 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 
     <script>
-        // Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyBXOBu6fmbco27_ugn9pFg2XQ-TaIeNRpY",
             authDomain: "apknixy-bc9ee.firebaseapp.com",
@@ -238,117 +101,89 @@
         const auth = firebase.auth();
         const db = firebase.firestore();
         let user = null;
+        let userData = {};
 
-        // Authentication State Listener
         auth.onAuthStateChanged(u => {
-            if (u) { user = u; navigate('dash'); syncUserData(); } 
-            else { navigate('auth'); }
+            if (u) {
+                user = u;
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'block';
+                loadData();
+            }
         });
 
-        // Basic Functions
-        function googleLogin() { auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).catch(e => alert(e.message)); }
-        function logout() { auth.signOut(); location.reload(); }
-        function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); }
+        function googleLogin() { auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()); }
 
-        // Navigation System
-        function navigate(target) {
-            ['auth', 'dash', 'withdraw', 'history'].forEach(v => document.getElementById(v + '-view').classList.add('hidden'));
-            document.getElementById(target + '-view').classList.remove('hidden');
-            document.getElementById('sidebar').classList.remove('active');
-            if (target === 'history') fetchHistoryData();
-        }
-
-        // Data Synchronization
-        function syncUserData() {
+        function loadData() {
             db.collection('users').doc(user.uid).onSnapshot(doc => {
-                if (doc.exists) {
-                    const d = doc.data();
-                    document.getElementById('bal-disp').innerText = (d.balance || 0).toFixed(2);
-                    if (d.upi) {
-                        document.getElementById('upi-target').innerText = d.upi;
-                        document.getElementById('upi-setup').style.display = 'none';
+                if(doc.exists) {
+                    userData = doc.data();
+                    document.getElementById('userBal').innerText = (userData.balance || 0).toFixed(2);
+                    document.getElementById('dailyCount').innerText = userData.dailyCount || 0;
+                    
+                    // Task Button Logic
+                    const nextTask = (userData.dailyCount || 0) + 1;
+                    if(nextTask > 1000) {
+                        document.getElementById('startBtn').innerText = "All Tasks Completed (Reset Tomorrow)";
+                        document.getElementById('startBtn').disabled = true;
                     } else {
-                        document.getElementById('upi-target').innerText = "Not Configured";
-                        document.getElementById('upi-setup').style.display = 'block';
+                        document.getElementById('startBtn').innerText = `START TASK ${nextTask}`;
+                        document.getElementById('startBtn').disabled = false;
                     }
+
+                    // Profile Check
+                    if(!userData.upi || !userData.dob) {
+                        document.getElementById('profile-warn').style.display = 'block';
+                    } else {
+                        document.getElementById('profile-warn').style.display = 'none';
+                    }
+                } else {
+                    // New User Setup
+                    db.collection('users').doc(user.uid).set({
+                        email: user.email, balance: 0, dailyCount: 0
+                    });
                 }
             });
         }
 
-        function saveUpiConfig() {
-            const val = document.getElementById('upi-in').value.trim();
-            if (val.includes('@')) {
-                db.collection('users').doc(user.uid).set({ upi: val, email: user.email }, { merge: true })
-                  .then(() => alert("UPI Saved Successfully"));
-            } else { alert("Invalid UPI format"); }
+        function openProfile() { document.getElementById('profileModal').style.display = 'flex'; }
+        
+        function saveProfile() {
+            const name = document.getElementById('pName').value;
+            const age = document.getElementById('pAge').value;
+            const dob = document.getElementById('pDob').value;
+            const upi = document.getElementById('pUpi').value;
+
+            if(!name || !age || !dob || !upi) return alert("Fill all fields");
+
+            db.collection('users').doc(user.uid).update({
+                name, age, dob, upi
+            }).then(() => {
+                alert("Profile Saved!");
+                document.getElementById('profileModal').style.display = 'none';
+            });
         }
 
-        // --- NEW TIMEWALL INTEGRATION (Correct Link) ---
-        function openTimeWall() {
-            // Aapka Naya Approved Link + User ID
-            const baseUrl = "https://timewall.io/users/login?oid=daabc8fe249e2334";
-            const finalUrl = `${baseUrl}&uid=${user.uid}`;
-
-            document.getElementById('tw-frame').src = finalUrl;
-            document.getElementById('tw-overlay').style.display = 'flex';
+        function startTaskSession() {
+            const isAuto = document.getElementById('autoMode').checked;
+            const nextTask = (userData.dailyCount || 0) + 1;
+            // Go to Dynamic Task Page
+            window.location.href = `task.html?id=${nextTask}&auto=${isAuto}`;
         }
+        
+        function requestWithdraw() {
+            const amt = parseFloat(document.getElementById('wAmount').value);
+            if(amt < 500) return alert("Min Withdraw: ₹500");
+            if(amt > userData.balance) return alert("Insufficient Balance");
+            if(!userData.upi) return alert("Complete Profile First");
 
-        function closeTimeWall() {
-            document.getElementById('tw-overlay').style.display = 'none';
-            document.getElementById('tw-frame').src = "";
-            // Balance auto-syncs via onSnapshot
-        }
-
-        // Smart Link
-        function openSmartLink() {
-            window.open(`https://www.lisabergtrain.support/click?offer_id=32308&pub_id=267394&pub_click_id=${user.uid}&site=apknixy`, '_blank');
-        }
-
-        // Withdrawal Logic
-        function processPayout() {
-            const amt = parseFloat(document.getElementById('amt-in').value);
-            const bal = parseFloat(document.getElementById('bal-disp').innerText);
-            const upi = document.getElementById('upi-target').innerText;
-
-            if (amt < 200) return alert("Minimum withdrawal: ₹200");
-            if (amt > bal) return alert("Insufficient funds");
-            if (upi === "Not Configured") return alert("Please configure UPI first");
-
-            if (confirm(`Confirm withdrawal of ₹${amt}?`)) {
+            db.collection('withdrawals').add({
+                userId: user.uid, amount: amt, status: 'pending', date: new Date(), upi: userData.upi
+            }).then(() => {
                 db.collection('users').doc(user.uid).update({
                     balance: firebase.firestore.FieldValue.increment(-amt)
-                }).then(() => {
-                    db.collection('withdrawals').add({
-                        userId: user.uid, email: user.email, upi: upi,
-                        amount: amt, status: 'pending', date: new Date()
-                    });
-                    alert("Withdrawal Request Submitted.");
-                    document.getElementById('amt-in').value = "";
-                    navigate('history');
-                }).catch(e => alert("Error: " + e.message));
-            }
-        }
-
-        // History Fetching
-        function fetchHistoryData() {
-            const list = document.getElementById('hist-list');
-            list.innerHTML = "Loading records...";
-            db.collection('withdrawals').where("userId", "==", user.uid).orderBy("date", "desc").limit(15).get().then(snap => {
-                if(snap.empty) { list.innerHTML = "No transactions found."; return; }
-                list.innerHTML = "";
-                snap.forEach(doc => {
-                    const d = doc.data();
-                    const statusClass = d.status === 'paid' ? 'st-paid' : (d.status === 'rejected' ? 'st-rejected' : 'st-pending');
-                    list.innerHTML += `
-                        <div class="hist-item">
-                            <div>
-                                <div style="font-weight:700; font-size:18px;">₹${d.amount}</div>
-                                <div style="font-size:12px; color:var(--text-muted);">${new Date(d.date.seconds*1000).toLocaleDateString()}</div>
-                            </div>
-                            <div class="hist-status ${statusClass}">${d.status}</div>
-                        </div>
-                    `;
                 });
+                alert("Withdraw Request Sent!");
             });
         }
     </script>
